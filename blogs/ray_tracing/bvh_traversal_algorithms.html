@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<head>
+    <title>GPU Traversal Algorithms for Bounding Volume Hierarchies</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>GPU Traversal Algorithms for Bounding Volume Hierarchies</h1>
+    <p>Published July 21st, 2022</p>
+    <h2>Introduction</h2>
+    <p>Ray tracing is a class of algorithms used to find intersections with a given 3D scene. It is necessary in applications like path tracing, which utilize ray tracing to generate light paths. The most obvious approach we could use for implementing ray tracing is to compute intersections of a ray with every geometric primitive (typically triangles) within a scene. However, this method has o(n) complexity, where n is the number of primitives, so it does not scale well for the millions to billions of triangles in even the simplest scenes today in movies and animations to video games. To speed up this algorithm, we can observe that we can group a list of primitives together and test an encolosing volume formed by them instead (usually a box) to determine if we need to intersect them or if we can skip the list altogether. This subdivision process can be repeated for the volumes recursively until some termination critrea to form a <em>bounding volume hierachy</em> (also known as a BVH). A BVH is a tree of bounding volumes containing sections of scene that are spatially local to each other. Ray tracing can then be implemnted by <em>travering</em> this tree. If a ray intersects a node's bounding volume, we can test its children if the node is a parent node or indivually intersect with the primitives contained with the node if it is a leaf node. This method of traversal is extremely fast, with a complexity of o(log(n)). However, to acheive that speed, we need to make sure we are using the most efficient algorithms to construct and traverse a BVH. There are a large amount of literature dedicated to constructing BVHs and traversing them. In this blog, I will focus specifically on some traversal methods for <em>binay BVHs</em> (BVHs where each parent node has exactly two children) for GPUs in particular. I first go over the simplest stack-based algorithms, and then discuss their efficiency on GPUs. Then I discuss work that has been done to design more efficient stack-based traversal, and end with discussion of works to design stackless algorithms.</p>
+    <h2>Stack-based Traversal Algorithms</h2>
+    <h3>Recursive traversal</h3>
+    <p>The most common way we can implement BVH traversal is by depth-first search (DFS). This will enable us several optimizations, which I will explain later. The most common way to implement DFS is by recursively calling a <code>traverse</code> function that takes in a node and a ray. In the following code snippet, I refer to children of a node as <code>left</code> and <code>right</code>. Note that the algorithm assumes that the root node is not a leaf</p>
+    <pre>
+        <code>
+func traverse(ray, node)
+    if(ray intersects node.left's box)
+        if node.left is a leaf
+            intersect all of left's primitives
+        else
+            traverse(ray, node.left)
+        endif
+    endif
+    if(ray intersects node.rights's box)
+        if node.rights is a leaf
+            intersect all of rights's primitives
+        else
+            traverse(ray, node.rights)
+        endif
+    endif
+endfunc
+        </code>
+    </pre>
+    <p> The traversal begins by calling <code>traverse(ray, root)</code> from somewhere in our code. Our algorithm then checks for each child node if our ray intersects its box. If it does, we check if it is a leaf and if it is, we subsequently go through each primitive contained in it. If it is not a leaf, meaning it is a parent node, we go recursively traverse that child's subtree. Simple, right? Yes, but there's one small problem: recursive function calls absolutely suck. Besides the high overhead associated with each non-inlined function call (since you cannot inline recursion), most GPUs don't even support recursion (well, while AMD GPUs have no support for recursion, Nvidia GPUS do, but it is only on their proprietary CUDA software).</p>
+    <h3>Iterative Traversal</h3>
+    <P>Thankfully, there is a simple fix to our issue with recursion: nearly all recursive algorithms can be efficiently mapped to iterative ones, and trees are no exception. We can begin by observing that, in an iterative algorithm, we will be traversing only one node at a time. This means that if we go down <code>left</code>'s subtree, and if our <code>right</code> node needs to be traversed after <code>left</code>, we will have have to remember <code>right</code> somehow, and go back to it after <code>left</code> is done being processed. This makes a stack a perfect canidate for iterative traversal: at each traversal step, if we have a node that we need to traverse later, we can push it to a stack. Since a stack is a FILO data structure, it will contain the most recently postponed node. Once we are done processing a subtree (which occurs when we don't any intersected children nodes that aren't leaf nodes), we need to move on to the most recently postponed node, which can be done by a simple stack pop. If the stack underflows, i.e. it is empty, we know we have no other nodes left to process, allowing us to terminate traversal. It can be implemnted as follows:</P>
+    <pre>
+        <code>
+func traverse(ray)
+    Node current_node = root
+    stack of nodes posponed_nodes
+    while true
+        Node left = current_node.left
+        Node right = current_node.right
+
+        if(ray hit left's box AND left is a leaf)
+            intersect left's primitives
+        endif
+
+        if(ray hit right's box AND right is a leaf)
+            intersect right's primitives
+        endif
+
+        bool traverse_left = ray hit left's box AND left is not a leaf
+        bool traverse_right = ray hit rights's box AND right is not a leaf
+
+        if(traverse_right AND traverse_left)
+            push right on to posponed_nodes
+            current_node = left
+        else if (traverse_left AND NOT traverse_right)
+            current_node = left
+        else if (traverse_right AND NOT traverse_left)
+            current_node = right
+        else    
+            current_node = topmost node on posponed_nodes
+            pop posponed_nodes
+        endif
+    endwhile
+endfunc
+        </code>
+    </pre>
+    <p>The code may look daunting at first, but there is nothing complicated with the algorithm. The first thing we do is set a variable called <code>current_node</code> to the root of the tree. This is because we begin our iterative traversal at the root, since the first node we process is the root. Then, for each loop iteration we first fetch <code>left</code> and <code>right</code> from memory. We take a look at each node, and intersect their primitives if they are leaf nodes that are interscted by our ray. Then, if both nodes are parent nodes that are intersected by our ray, then we have to push one of the nodes on to the stack. On the other hand, if only one parent node was interscted, then we move on to that one. Otherwise, if no parent node was interscted, we go to the most recently postponed node by poping the stack.</p>
+    <h4>Sorting by distance</h4>
+    <p>Even in iterative traversal, our algorithm is still slow, and if we try to count the number traversal steps and primitive intersections per each invocation of <code>traverse</code>, we find that our numbers are unusally high. This is because we do not sort by distance. Suppose we have a scene where the camera is facing toward a wall, and wants to render the view of the scene. Behind the wall, there are meshes with many triangles. Ideally, we would want our traversal to proceed to the leaf nodes for the wall, and then search for intersections <em>closer</em> than the wall, since what is behind the wall (the currently closest found intersection) has no use when rendering the scene. However, our current algorithm has no regard for the cloest intersection, and will move on to the leaves behind the wall. The simplest fix to this is redefining what it means for a ray to hit a box. Currently, when we test against a box's box, we use mathematical formulas to determine whether the ray goes through the box. However, a closest interection might block the ray. Therefore, we need to compute the distance to the box from the ray in the direction it is facing. If it is further than the closest found intersection, we assume the box did not get hit by the ray. This simple way, we can ignore any node intersections beyond our current bounds. In our scene with the wall, we would expect this to make our performance sky rocket, but it doesn't change much. Why? This is because, while we ignore intersections further than the closest found intersection, we initially have no information for the closest found intersection, and proceed with traversal as if we didn't have this optimization in the first place. To correct this traversal order, we need to sort by distance to the box. This way, closest nodes-in our case it is the wall's leaf node-are traveresed to first, allowing us properly set our ray bounds, and ignore any further traversal. In our traversal, we can implement this right before we push a node to the stack:</p>
+    <pre>
+        <code>
+if(traverse_right AND traverse_left)
+    if(distance to right IS LESS THAN distance to left)
+        swap right with left
+    endif
+    push right on to posponed_nodes
+    current_node = left
+endif
+        </code>
+    </pre>
+    <p>Suddenly our traversal has gotten a lot more efficeint.</p>
+    <h3>GPU Efficiency</h3>
+    <P>GPUs have a massive amount of cores, with even old ones from the mid to late 2000s having thousands in a single card. GPUs execute using the single instruction multiple threads (SIMT) model. A group (usually 32) of threads, known as a warp, executes the same intruction in lock-step, allowing simple work to be done with massive parralellization. However, to execute flow control statements like <code>if</code> is done by pausing the threads that will not execute that branch. This is problematic for BVH traversal as there is a significant amount of branching, which leads to poor hardware utilizations. One trick we can use to allieviate this issue is make sure if one node is a leaf, it is is set to be the <code>left</code> node. This means that if any thread needs to intersect a single leaf, it does not matter if it is the left or right child, allowing it to execute the same branch. </P>
+</body>
