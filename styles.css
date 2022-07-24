@@ -31,7 +31,7 @@ h1 {
     background-color: black;
     padding-left: 4px;
     padding-top: 4px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 code {
