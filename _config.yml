@@ -69,3 +69,5 @@ defaults:
   - scope:
       path: "_pages"
       type: "pages"
+
+permalink: none

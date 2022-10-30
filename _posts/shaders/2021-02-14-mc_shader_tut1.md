@@ -1,6 +1,8 @@
 ---
 title: "Minecraft Shader Tutorial 1 - The Final Program"
 layout: splash
+categories:
+    - shaders
 ---
 
 In this tutorial we explore the most basic fullscreen pass: The final pass.

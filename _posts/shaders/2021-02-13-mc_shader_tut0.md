@@ -1,6 +1,8 @@
 ---
 title: "Minecraft Shader Tutorial 0 - Prerequisites"
 layout: splash
+categories:
+    - shaders
 ---
 
 Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.

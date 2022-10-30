@@ -1,6 +1,8 @@
 ---
 title: "Minecraft Shader Tutorial 4 - Advanced Shadows"
 layout: splash
+categories:
+    - shaders
 ---
 
 In this tutorial I will make our shadows look actually good. I will be covering things like PCF, shadow distortion, and transparent shadows.

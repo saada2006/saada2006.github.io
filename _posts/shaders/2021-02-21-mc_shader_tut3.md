@@ -1,6 +1,8 @@
 ---
 title: "Minecraft Shader Tutorial 3 - Lighting and Shadows"
 layout: splash
+categories:
+    - shaders
 ---
 
 In this tutorial we will look at implementing the lightmap and shadows.

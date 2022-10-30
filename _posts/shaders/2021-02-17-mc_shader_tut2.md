@@ -1,6 +1,8 @@
 ---
 title: "Minecraft Shader Tutorial 2 - The Gbuffers and Composite Programs"
 layout: splash
+categories:
+    - shaders
 ---
 
 Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting

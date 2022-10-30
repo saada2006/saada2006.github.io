@@ -1,6 +1,8 @@
 ---
 title: "BVH Traversal Algorithms"
 layout: splash
+categories:
+    - gpu
 ---
 
 Designing Algorithms that traverse BVHs efficiently on the GPU is no easy task. Porting the usual CPU algorithms for traversal will not work well at all, unless you enjoy horrible performance along with low hardware utilization. Thankfully, some smart people have already created efficient traversal methods, so we do not need to waste our time getting a degree in GPU programming to make ray tracing work fast. In this blog post, I begin by first going over some of the basics of how GPUs work, and then move onto making your traversal more efficient.
