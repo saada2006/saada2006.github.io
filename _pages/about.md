@@ -10,4 +10,4 @@ I am the founder of a finance company, CashEye Finance. We use the latest machin
 
 I have worked on implementing a real-time GPU path tracer in OpenGL/C++. I am now working at Irwin Laboratories @ UCSF to move DOCK 3.8 to the GPU.
 
- {% pdf "/resume.pdf" %}
+[Read my resume](/resume.pdf)
