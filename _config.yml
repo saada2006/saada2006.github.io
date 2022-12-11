@@ -56,18 +56,12 @@ plugins:
 
 author:
   name: "Saad Amin"
-  bio: "CEO of CashEye Finance. Research intern at UCSF. MSJHS '24. xero#4211" 
+  bio: "Research intern at UCSF. MSJHS '24. saada#4211" 
 
 include:
   - _pages
 
 permalink: /:categories/:title/
-paginate: 5 # amount of posts to show
 paginate_path: /page:num/
-
-defaults:
-  - scope:
-      path: "_pages"
-      type: "pages"
 
 permalink: none
