@@ -3,6 +3,7 @@ title: "Introduction to Molecular Docking"
 layout: splash
 categories:
     - cheminformatics
+thumbnail: /assets/cheminformatics/folding.png
 ---
 
 Molecular docking is a class of algorithms that predict how proteins create bonds with small molecules called ligands. Docking is an important tool in drug discovery. This posts gives a brief description of the algorithm used in UCSF's DOCK project for non-chemistry majors. 
