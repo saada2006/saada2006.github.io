@@ -118,6 +118,6 @@ void main() {
 
 Here is the results of the shader:
 
-![Image of the Grayscale Shader](images/demo.png)
+![Image of the Grayscale Shader](/assets/images/mc_shaders_part1/demo.png)
 
 Although it is not much, it's definitely a start on your shader programming journey! In the next tutorial, we will do some block rendering and learn about `composite`, which is the other fullscreen pass I mentioned.
