@@ -1,0 +1,225 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Minecraft Shader Tutorial 0 - Prerequisites - Saad’s blog</title>
+<meta name="description" content="Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.">
+
+
+  <meta name="author" content="Saad Amin">
+  
+  <meta property="article:author" content="Saad Amin">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Saad's blog">
+<meta property="og:title" content="Minecraft Shader Tutorial 0 - Prerequisites">
+<meta property="og:url" content="http://localhost:4000/posts/shaders/2021-02-13-mc_shader_tut0/">
+
+
+  <meta property="og:description" content="Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-02-13T00:00:00-08:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/posts/shaders/2021-02-13-mc_shader_tut0/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Saad's blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </head>
+
+  <body class="layout--splash">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/projects/">Projects</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">Personal</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+<div id="main" role="main">
+  <article class="splash" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Minecraft Shader Tutorial 0 - Prerequisites">
+    <meta itemprop="description" content="Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.">
+    <meta itemprop="datePublished" content="2021-02-13T00:00:00-08:00">
+    
+
+    <section class="page__content" itemprop="text">
+      <p>Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.</p>
+
+<h2 id="graphics-in-minecraft">Graphics in Minecraft</h2>
+
+<p>Minecraft is written in a really old version of OpenGL, and shaders are only available via OpenGL extensions. Since Minecraft is written in such an old OpenGL version, many (old) shaders are written in GLSL version 120. For simplicity’s sake, I will be also writing my shaders in version 120. Many things very different between version 120 and more mordern versions of GLSL. Here are a few examples:</p>
+
+<ul>
+  <li>You no longer specify vertex attributes with <code class="language-plaintext highlighter-rouge">layout(location = N) in genType var</code>. Instead you do <code class="language-plaintext highlighter-rouge">attribute genType var</code>. The shaders mod knows the locations of the attributes by using <code class="language-plaintext highlighter-rouge">glGetAttribLocation</code>.</li>
+  <li>You can’t use <code class="language-plaintext highlighter-rouge">in</code> or <code class="language-plaintext highlighter-rouge">out</code> to transfer variables between the vertex and fragment shader. You must use a keyword called <code class="language-plaintext highlighter-rouge">varying</code>. <code class="language-plaintext highlighter-rouge">varying</code> was replaced with <code class="language-plaintext highlighter-rouge">in</code> and <code class="language-plaintext highlighter-rouge">out</code> in newer OpenGL versions because other shaders besides the vertex and fragment shader were added.</li>
+  <li>GLSL version 120 had a lot more in-built variables than modern ones. Some examples include <code class="language-plaintext highlighter-rouge">gl_Vertex</code> and <code class="language-plaintext highlighter-rouge">gl_Normal</code>. I will explain how these are used in the later tutorials I suggest you check out the <a href="https://www.khronos.org/registry/OpenGL/specs/gl/GLSLangSpec.1.20.pdf">GLSL Version 120 Specifcation</a> for the full list.</li>
+  <li>If you want to write to a render target you must use <code class="language-plaintext highlighter-rouge">gl_FragColor</code> and <code class="language-plaintext highlighter-rouge">gl_FragData</code>. <code class="language-plaintext highlighter-rouge">gl_FragData</code> is an array of <code class="language-plaintext highlighter-rouge">vec4</code> with size of <code class="language-plaintext highlighter-rouge">GL_MAX_COLOR_ATTACHMENTS</code> (typically 8, you can check the <a href="https://opengl.gpuinfo.org/displaycapability.php?name=GL_MAX_COLOR_ATTACHMENTS">OpenGL GPU database</a> for more details). Each element of <code class="language-plaintext highlighter-rouge">gl_FragData</code> corresponds to a color attachment. For example, the first color attachment is <code class="language-plaintext highlighter-rouge">gl_FragData[0]</code>, the second one is <code class="language-plaintext highlighter-rouge">gl_FragData[1]</code>, and so on. <code class="language-plaintext highlighter-rouge">gl_FragColor</code> is like <code class="language-plaintext highlighter-rouge">gl_FragData</code> except it writes to all color attachments.</li>
+</ul>
+
+<h3 id="rendering-the-blocks">Rendering the blocks</h3>
+
+<p>Now with that out of the way, we can focus on how Minecraft actually does it’s rendering. Minecraft is a voxel game, and therefore it does not follow the normal style of rendering that is present in most games.First of all, Minecraft has to render a large amount of blocks, which could be different types of blocks. Rendering each block as it’s own draw call is a really bad idea for performance. Intancing could work, but it has it’s own limitations, besides not being present in ancient version of OpenGL at all. Instead, what Minecraft does it it batches verticies into a chunks of verticies, so each chunk becomes it’s own draw call. To texture each block, Minecraft uses a texture atlas.</p>
+
+<h3 id="lighting">Lighting</h3>
+
+<p>Lighting in Minecraft is a bit different from how it is done in other games. Minecraft needs to support an arbitrary number of light sources, with the features of old OpenGL versions, and have decent performance on slow hardware like Intel iGPUs and Apple Macs. There also needs to be occlusion detection for the lights, that is, a light behind a wall cannot light up what is in front of the the wall. Doing this the “normal” way would require storing all lights in a texture and having a texture atlas of shadow maps for each light. This doesn’t support area lighting, so lighting from blocks like glowstone up close will look bad, and this would be insanely costly. Imagine how slow rendering the nether would be, since each lava block in the nether needs to be processed. Minecraft needs a different approach from this.</p>
+
+<p>Some of you who play Minecraft will know that each block has a lighting level, which comes from both torches and how exposed a block is to the sky. Minecraft reuses this information for lighting the blocks. Each vertex has a <code class="language-plaintext highlighter-rouge">vec2</code> attribute known as the “lightmap coordinates”. The <code class="language-plaintext highlighter-rouge">x</code> value represents lighting from blocks like torches and glowstone, while the <code class="language-plaintext highlighter-rouge">y</code> value represents how much the vertex is exposed to the sky. These values in older versions of Minecraft are from 0 to 15, but in newer versions it can be up to the 200s.</p>
+
+<p>The lightmap alone is not enough to light the block. It somehow has to be converted to a lighting color which then has to be multiplied by the block color to obtain the final color that gets displayed on your screen. Minecraft by default uses the light map coordinates (after doing math to move them to the [0, 1] range) as texture coordinates to look up a lighting color value from a lightmap texture in the fragment shader. The lighting color value gets multiplied by the block color and then displayed on your screen. See the <a href="https://github.com/sp614x/optifine/blob/master/OptiFineDoc/doc/custom_lightmaps.txt">Optifine documentation</a> on this for more details. We won’t be using the light map coordinates to look up from the lightmap texture. We will be doing our own math to calculate the lighting value. This is what most other shaders do anyway (and when I mean most I mean 99.9%, if it doesn’t, then it’s probably a really bad or super old no-name shader)</p>
+
+<h2 id="how-shaders-work">How Shaders Work</h2>
+
+<p>To understand how shaders work, lets understand how the shader pipeline works. The shader pipeline is comprised of a bunch of fullscreen passes, a few block and entity rendering passes, and a shadow pass. What shader packs do is define what goes on in each pass of the pipeline. To give an example, let’s say I wanted to do a blur of what I see on my screen. I could write a fullscreen pass that does that. If this sounds confusing, don’t worry, it will become much more easier to understand in the coming tutorials. (note: if any exprienced shader dev has a better explanation of this part, please contact me with the better explanation so I can update this section with it)</p>
+
+    </section>
+  </article>
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Saad's blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+  
+</html>

@@ -1,18 +1,16 @@
-title: Saad Amin's Website
+title: Saad's blog
 description: >- # this means to ignore newlines until "baseurl:"
-  Saad Amin's website
+  Home
 baseurl:
-twitter_username: saada2006
-github_username:  saada2006
 
-minimal_mistakes_skin: "neon"
+minimal_mistakes_skin: "contrast"
 plugins:
   - jekyll-feed
   - jekyll-include-cache
 
 author:
   name: "Saad Amin"
-  bio: "Research intern at UCSF. MSJHS '24. saada#4211" 
+  bio: "GPU Compute Programmer" 
 
 include:
   - _pages
@@ -21,3 +19,10 @@ permalink: /:categories/:title/
 paginate_path: /page:num/
 
 permalink: none
+
+masthead_title: "Home"
+
+collections:
+  posts:
+    output: true
+    permalink: /:collection/:path/
