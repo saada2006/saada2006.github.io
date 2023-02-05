@@ -10,6 +10,7 @@
   -webkit-animation-delay: 0.15s;
   animation-delay: 0.15s;
   z-index: 20;
+  background-color: $navbar-background;
 
   &__inner-wrap {
     @include clearfix;
@@ -85,6 +86,7 @@
   display: block;
   list-style-type: none;
   white-space: nowrap;
+  //color: $navbar-text;
 
   &--lg {
     padding-right: 2em;

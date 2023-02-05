@@ -177,18 +177,18 @@
   -ms-flex-align: center;
   align-items: center;
   min-height: $nav-height;
-  background: $background-color;
+  background: $navbar-background;//$background-color; 
 
   a {
     display: block;
     margin: 0 1rem;
-    color: $masthead-link-color;
+    color: $navbar-text;//$masthead-link-color;
     text-decoration: none;
     -webkit-transition: none;
     transition: none;
 
     &:hover {
-      color: $masthead-link-color-hover;
+      color: $navbar-text-hover;//$masthead-link-color-hover;
     }
 
     &.site-logo {
@@ -282,7 +282,7 @@
       font-size: $type-size-5;
 
       &:hover {
-        color: $masthead-link-color-hover;
+        color: $navbar-text;//$masthead-link-color-hover;
         background: $navicon-link-color-hover;
       }
     }

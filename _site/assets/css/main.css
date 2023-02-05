@@ -1649,7 +1649,8 @@ th {
   animation: intro 0.3s both;
   -webkit-animation-delay: 0.15s;
   animation-delay: 0.15s;
-  z-index: 20; }
+  z-index: 20;
+  background-color: black; }
   .masthead__inner-wrap {
     clear: both;
     margin-left: auto;
@@ -1857,16 +1858,16 @@ th {
   -ms-flex-align: center;
   align-items: center;
   min-height: 2em;
-  background: #fff; }
+  background: black; }
   .greedy-nav a {
     display: block;
     margin: 0 1rem;
-    color: #000;
+    color: white;
     text-decoration: none;
     -webkit-transition: none;
     transition: none; }
     .greedy-nav a:hover {
-      color: #000; }
+      color: #FAF9F6; }
     .greedy-nav a.site-logo {
       margin-left: 0;
       margin-right: 0.5rem; }
@@ -1934,7 +1935,7 @@ th {
       padding: 10px 20px;
       font-size: 1em; }
       .greedy-nav .hidden-links a:hover {
-        color: #000;
+        color: white;
         background: #cccccc; }
     .greedy-nav .hidden-links:before {
       content: "";

@@ -1,0 +1,499 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Minecraft Shaders Part 2 - Saad’s blog</title>
+<meta name="description" content="Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting">
+
+
+  <meta name="author" content="Saad Amin">
+  
+  <meta property="article:author" content="Saad Amin">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Saad's blog">
+<meta property="og:title" content="Minecraft Shaders Part 2">
+<meta property="og:url" content="http://localhost:4000/blogs/mc_shaders_part2">
+
+
+  <meta property="og:description" content="Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/mc_shaders_part2/simple_diffuse.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2021-02-17T00:00:00-08:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blogs/mc_shaders_part2">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Saad's blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/projects/">Projects</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">Personal</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.24)), url('/assets/images/mc_shaders_part2/simple_diffuse.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Minecraft Shaders Part 2
+
+        
+      </h1>
+      
+        <p class="page__lead">Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting
+
+</p>
+      
+      
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Minecraft Shaders Part 2">
+    <meta itemprop="description" content="Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting">
+    <meta itemprop="datePublished" content="2021-02-17T00:00:00-08:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-cog"></i> Table of Contents</h4></header>
+              <ul class="toc__menu"><li><a href="#what-is-gbuffers">What is gbuffers?</a></li><li><a href="#what-is-composite">What is composite?</a></li><li><a href="#the-color-textures-and-concept-of-drawbuffers">The color textures and concept of drawbuffers</a><ul><li><a href="#color-texture-names">Color texture names</a></li></ul></li><li><a href="#show-me-the-code">Show me the code</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p>Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting</p>
+
+<h1 id="what-is-gbuffers">What is gbuffers?</h1>
+
+<p>The gbuffers programs are the main geometry passes. In gbuffers, you can render entities, particals, blocks, etc from the point of view of the player. There are different types of gbuffers programs. For example, <code class="language-plaintext highlighter-rouge">gbuffers_terrain</code> renders blocks like stone and dirt, while <code class="language-plaintext highlighter-rouge">gbuffers_entities</code> renders entities like mobs and chests. In gbuffers you can use them for forward rendering or use them as the gbuffers stage in a deferred rendering pipeline.</p>
+
+<h1 id="what-is-composite">What is composite?</h1>
+
+<p>The composite programs are fullscreen passes that run after all the gbuffers programs have finished executing. There are 15 of them, going from <code class="language-plaintext highlighter-rouge">composite</code>, <code class="language-plaintext highlighter-rouge">composite1</code>, <code class="language-plaintext highlighter-rouge">composite2</code>, <code class="language-plaintext highlighter-rouge">compositeN</code>, <code class="language-plaintext highlighter-rouge">composite15</code>. In the composite programs, you can do things like deferred lighting and post processing.</p>
+
+<h1 id="the-color-textures-and-concept-of-drawbuffers">The color textures and concept of drawbuffers</h1>
+
+<p>In the entire part of the shader pipeline from gbuffers to composite, you have 8 color textures to fiddle with. You can sample from them and write to them. Do note that these are the same 8 color textures no matter which part of the pipeline you are in. For example, if I wrote the albedo color to color texture 1 in <code class="language-plaintext highlighter-rouge">gbuffers_terrain</code>, and then sampled from it in <code class="language-plaintext highlighter-rouge">composite</code>, I would get the albedo color of the block. You can also use this feature to move data between shader stages. For example, if I wrote the color <code class="language-plaintext highlighter-rouge">vec3(0.5f)</code> to color texture 2 in <code class="language-plaintext highlighter-rouge">composite</code>, I would get the same color if I sampled from it in <code class="language-plaintext highlighter-rouge">composite1</code>. To select which color textures you want to write to, use the following comment somewhere in the fragment shader:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* DRAWBUFFERS:NNNN */</span>
+</code></pre></div></div>
+
+<p>Here N coressponds to a buffer index, which is basically which color texture you want to render to. You don’t have to have exactly 4 render targets, but you must at least have 1. Here is an example we are going to use in our shader today:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* DRAWBUFFERS:01 */</span>
+</code></pre></div></div>
+
+<p>This allows me to write to color textures 0 and 1. To actually write to the color textures from the shader, you can use <code class="language-plaintext highlighter-rouge">gl_FragData</code>. Here is another example:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* DRAWBUFFERS:37 */</span>
+<span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">SomethingToWriteToColorTexture3</span><span class="p">;</span>
+<span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">SomethingToWriteToColorTexture7</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>You can also specify the format of color textures like so:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">RGBA16</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">RGBA32F</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">int</span> <span class="n">colortex2Format</span> <span class="o">=</span> <span class="n">RGBA16</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">colortex4Format</span> <span class="o">=</span> <span class="n">RGBA32F</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>See the Optifine docuementation for the full list of availble color texture formats.</p>
+
+<h2 id="color-texture-names">Color texture names</h2>
+
+<p>In old shader code, you might see this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// The legacy names</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">gcolor</span><span class="p">;</span>    <span class="c1">// color texture 0</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">gdepth</span><span class="p">;</span>    <span class="c1">// color texture 1</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">gnormal</span><span class="p">;</span>   <span class="c1">// color texture 2</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">composite</span><span class="p">;</span> <span class="c1">// color texture 3</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">gaux1</span><span class="p">;</span>     <span class="c1">// color texture 4</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">gaux2</span><span class="p">;</span>     <span class="c1">// color texture 5</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">gaux3</span><span class="p">;</span>     <span class="c1">// color texture 6</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">gaux4</span><span class="p">;</span>     <span class="c1">// color texture 7</span>
+</code></pre></div></div>
+
+<p>In more modern shader code you would see this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex0</span><span class="p">;</span> <span class="c1">// color texture 0</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex1</span><span class="p">;</span> <span class="c1">// color texture 1</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex2</span><span class="p">;</span> <span class="c1">// color texture 2</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex3</span><span class="p">;</span> <span class="c1">// color texture 3</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex4</span><span class="p">;</span> <span class="c1">// color texture 4</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex5</span><span class="p">;</span> <span class="c1">// color texture 5</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex6</span><span class="p">;</span> <span class="c1">// color texture 6</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex7</span><span class="p">;</span> <span class="c1">// color texture 7</span>
+</code></pre></div></div>
+
+<p>I will not be using the legacy names in my tutorials.</p>
+
+<h1 id="show-me-the-code">Show me the code</h1>
+
+<p>Create a new shader pack. We do not want to keep the old grayscale code from the previous tutorial. Let’s start off with the vertex shader of <code class="language-plaintext highlighter-rouge">gbuffers_terrain</code>.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#version 120
+</span>
+<span class="k">varying</span> <span class="kt">vec2</span> <span class="n">TexCoords</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">Normal</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">ftransform</span><span class="p">();</span>
+    <span class="n">TexCoords</span> <span class="o">=</span> <span class="n">gl_MultiTexCoord0</span><span class="p">.</span><span class="n">st</span><span class="p">;</span>
+    <span class="n">Normal</span> <span class="o">=</span> <span class="nb">gl_NormalMatrix</span> <span class="o">*</span> <span class="nb">gl_Normal</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We first declare 2 <code class="language-plaintext highlighter-rouge">varying</code> variables, which are our normal vector and our texture coordinates. In the <code class="language-plaintext highlighter-rouge">main</code> function, we transform our vertex, and assign values to our texture coordinates and normal vector. <code class="language-plaintext highlighter-rouge">gl_Normal</code> is an in-built <code class="language-plaintext highlighter-rouge">attribute</code> variable representing the world space normal vector. However, we have to transform our normal from world space to view space since most of our calculations are done in view space. We will see why that is later. We do the normal transformation using an in-built <code class="language-plaintext highlighter-rouge">uniform</code> variabled called the <code class="language-plaintext highlighter-rouge">gl_NormalMatrix</code>.</p>
+
+<p>Let’s take a look at the fragment shader.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#version 120
+</span>
+<span class="k">varying</span> <span class="kt">vec2</span> <span class="n">TexCoords</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">Normal</span><span class="p">;</span>
+
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">texture</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="kt">vec4</span> <span class="n">albedo</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">texture</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">);</span>
+    <span class="cm">/* DRAWBUFFERS:01 */</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">albedo</span><span class="p">;</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">Normal</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here, we specify our drawbuffers and write to them. In draw buffer index 0, we write the albedo color, and in index 1 we write the normal. We have to move our normal vector to the [0, 1] range since our color textures are going to have an unsigned integer format. I could use an signed integer format, but that is only availble in newer versions of Optifine, and floating point formats are either going to be way too large or will not have enough precision. If we run our shader as is to make sure everything is working, we run into a problem:</p>
+
+<p><img src="/assets/images/mc_shaders_part2/broken_vegitation.png" alt="Broken Vegitation" /></p>
+
+<p>This problem occurs because the textures of blocks like grass and leaves are stored as gray scale on the texture atlas. These values are expected to be multipled by a per-vertex color attribute representing biome color. Here are our fixed vertex and fragment shaders.</p>
+
+<p>Vertex shader:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#version 120
+</span>
+<span class="k">varying</span> <span class="kt">vec2</span> <span class="n">TexCoords</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">Normal</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec4</span> <span class="n">Color</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Transform the vertex</span>
+    <span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">ftransform</span><span class="p">();</span>
+    <span class="c1">// Assign values to varying variables</span>
+    <span class="n">TexCoords</span> <span class="o">=</span> <span class="n">gl_MultiTexCoord0</span><span class="p">.</span><span class="n">st</span><span class="p">;</span>
+    <span class="n">Normal</span> <span class="o">=</span> <span class="nb">gl_NormalMatrix</span> <span class="o">*</span> <span class="nb">gl_Normal</span><span class="p">;</span>
+    <span class="n">Color</span> <span class="o">=</span> <span class="nb">gl_Color</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Fragment shader:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#version 120
+</span>
+<span class="k">varying</span> <span class="kt">vec2</span> <span class="n">TexCoords</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec3</span> <span class="n">Normal</span><span class="p">;</span>
+<span class="k">varying</span> <span class="kt">vec4</span> <span class="n">Color</span><span class="p">;</span>
+
+<span class="c1">// The texture atlas</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">texture</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="c1">// Sample from texture atlas and account for biome color + ambien occlusion</span>
+    <span class="kt">vec4</span> <span class="n">albedo</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">texture</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">)</span> <span class="o">*</span> <span class="n">Color</span><span class="p">;</span>
+    <span class="cm">/* DRAWBUFFERS:01 */</span>
+    <span class="c1">// Write the values to the color textures</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">albedo</span><span class="p">;</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">Normal</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">gl_Color</code> is an in-built attribute variable that, in this case, represents block color. For vegitation blocks, this is the biome color. For non-vegitative blocks, this is just <code class="language-plaintext highlighter-rouge">vec4(1.0f)</code>. Here is the result of our fix:</p>
+
+<p><img src="/assets/images/mc_shaders_part2/fixed_vegitation.png" alt="Fixed Vegitation" /></p>
+
+<p>Everything is looking much nicer now. We also get free ambient occlusion by doing this:</p>
+
+<p><img src="/assets/images/mc_shaders_part2/free_ao.png" alt="Free Ambient Occlusion" /></p>
+
+<p>Look closely at the places where a corner is formed by the intersection of blocks. You will notice that it looks a bit darker. This is because the color ends up getting darkened in occluded spots. One thing to note is that both the block color and texture atlas have display gamma baked into them. That is, if you want to do any lighting calculations on them, you have to convert your albedo from gamma sRGB to linear sRGB. We will do that in <code class="language-plaintext highlighter-rouge">composite</code>.</p>
+
+<p>Speaking of <code class="language-plaintext highlighter-rouge">composite</code>, let’s look at the vertex shader `composite.vsh:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#version 120
+</span>
+<span class="k">varying</span> <span class="kt">vec2</span> <span class="n">TexCoords</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+   <span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">ftransform</span><span class="p">();</span>
+   <span class="n">TexCoords</span> <span class="o">=</span> <span class="n">gl_MultiTexCoord0</span><span class="p">.</span><span class="n">st</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This is pretty much a copy-paste of our <code class="language-plaintext highlighter-rouge">final.vsh</code> vertex shader from the previous tutorial. The fragment shader is different however:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#version 120
+</span>
+<span class="k">varying</span> <span class="kt">vec2</span> <span class="n">TexCoords</span><span class="p">;</span>
+
+<span class="c1">// Direction of the sun (not normalized!)</span>
+<span class="k">uniform</span> <span class="kt">vec3</span> <span class="n">sunPosition</span><span class="p">;</span>
+
+<span class="c1">// The color textures which we wrote to</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex0</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">colortex1</span><span class="p">;</span>
+
+<span class="cm">/*
+const int colortex0Format = RGBA16;
+const int colortex1Format = RGBA16;
+*/</span>
+
+<span class="k">const</span> <span class="kt">float</span> <span class="n">sunPathRotation</span> <span class="o">=</span> <span class="o">-</span><span class="mi">40</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="kt">float</span> <span class="n">Ambient</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="c1">// Account for gamma correction</span>
+    <span class="kt">vec3</span> <span class="n">Albedo</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">texture2D</span><span class="p">(</span><span class="n">colortex0</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">).</span><span class="n">rgb</span><span class="p">,</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">2</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="p">));</span>
+    <span class="c1">// Get the normal</span>
+    <span class="kt">vec3</span> <span class="n">Normal</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">texture2D</span><span class="p">(</span><span class="n">colortex1</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">).</span><span class="n">rgb</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+    <span class="c1">// Compute cos theta between the normal and sun directions</span>
+    <span class="kt">float</span> <span class="n">NdotL</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">Normal</span><span class="p">,</span> <span class="n">normalize</span><span class="p">(</span><span class="n">sunPosition</span><span class="p">)),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+    <span class="c1">// Do the lighting calculations</span>
+    <span class="kt">vec3</span> <span class="n">Diffuse</span> <span class="o">=</span> <span class="n">Albedo</span> <span class="o">*</span> <span class="p">(</span><span class="n">NdotL</span> <span class="o">+</span> <span class="n">Ambient</span><span class="p">);</span>
+    <span class="cm">/* DRAWBUFFERS:0 */</span>
+    <span class="c1">// Finally write the diffuse color</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">Diffuse</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">sunPosition</code> here is the direction of the sun. <code class="language-plaintext highlighter-rouge">colortex0</code> and <code class="language-plaintext highlighter-rouge">colortex1</code> are the color textures we wrote to in <code class="language-plaintext highlighter-rouge">gbuffers_terrain</code>. After that we define out color texture formats. We will be using <code class="language-plaintext highlighter-rouge">RGBA16</code>. Notice how it was declared as a comment. It still works this way. After that, <code class="language-plaintext highlighter-rouge">sunPathRotation</code> is a variable Optifine reads. It describes how titled the sun is from an overhead path in degrees. <code class="language-plaintext highlighter-rouge">Ambient</code> is an ambient lighting factor we will use in our lighting calculations. Now we reach <code class="language-plaintext highlighter-rouge">main</code>. We first sample the albedo and then account for gamma correction. We also sample the normal and bring it back to teh [-1, 1] range. I normalize it jsut be sure it is a unit vector. Then I compute the dot product between the normal vector and the sun direction. For some reason, <code class="language-plaintext highlighter-rouge">sunPosition</code> is not a unit vector so I have to normalize it. Then I compute the lighting value and write to drawbuffer 0. Then this value gets read by <code class="language-plaintext highlighter-rouge">final</code>, and it gets gamma corrected and written to the screen. Here is what our shader looks like now:</p>
+
+<p><img src="/assets/images/mc_shaders_part2/simple_diffuse.png" alt="Simple Diffuse Lighting" /></p>
+
+<p>Notice how blocks facing away from the sun are lit less that those that are. Also notice how the sky looks completely broken. This is because <code class="language-plaintext highlighter-rouge">composite</code> is a fullscreen pass and that doesn’t mean it does not run for the sky as well. We will fix this bug in a later tutorial. In the next tutorial we will look at using the lightmap to account for both torch and sky lighting, and we will add shadows to our shaders.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2021-02-17T00:00:00-08:00">February 17, 2021</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/blogs/mc_shaders_part1" class="pagination--pager" title="Minecraft Shaders Part 1
+">Previous</a>
+    
+    
+      <a href="/blogs/mc_shaders_part3" class="pagination--pager" title="Minecraft Shaders Part 3
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Saad's blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+  
+</html>

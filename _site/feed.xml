@@ -1,49 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-02-05T00:42:10-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Saad’s blog</title><subtitle>Home</subtitle><author><name>Saad Amin</name></author><entry><title type="html">Introduction to Molecular Docking</title><link href="http://localhost:4000/posts/cheminformatics/2022-10-29-mol_docking/" rel="alternate" type="text/html" title="Introduction to Molecular Docking" /><published>2022-10-29T00:00:00-07:00</published><updated>2022-10-29T00:00:00-07:00</updated><id>http://localhost:4000/posts/cheminformatics/mol_docking</id><content type="html" xml:base="http://localhost:4000/posts/cheminformatics/2022-10-29-mol_docking/">&lt;p&gt;Molecular docking is a class of algorithms that predict how proteins create bonds with small molecules called ligands. Docking is an important tool in drug discovery. This posts gives a brief description of the algorithm used in UCSF’s DOCK project for non-chemistry majors.&lt;/p&gt;
-
-&lt;p&gt;This post is not yet complete, I still need to gather more information over the course of my internship at UCSF.&lt;/p&gt;
-
-&lt;h1 id=&quot;quick-crash-course-in-medicinal-chemistry&quot;&gt;Quick Crash Course in Medicinal Chemistry&lt;/h1&gt;
-
-&lt;p&gt;Medicinal chemistry is the study of medicine. The main goal of medicinal chemistry to create new drugs to cure suffering patients. Drug are chemicals designed to interact with proteins, receptors, enzymes or other chemicals in the body to produce a certain effect. For example, the drug Penicillen, arguably the most signficant discovery in medicine, works by binding to the enzyme DD-transpeptidase which holds a crucial role in repair of the bacterial cell wall. Once the bond has been formed, the enyzme no longer can repair the cell wall, eventually killing the bacteria.&lt;/p&gt;
-
-&lt;p&gt;Clearly, understanding how medcine interacts with chemicals in the body is at the heart of medicinal chemistry. Medicinal chemistry can be viewed as a field dedicated to solving the optimization problem of &lt;em&gt;which proposed drug produces the most desired effect on the body&lt;/em&gt;? There have been many methods to solving this problem, but most experiment-based methods are extremely slow. In recent years, computational methods like docking have become popular, despite their accuracy. Usually docking is used to narrow down the number of proposed chemicals to test exprimentally.&lt;/p&gt;
-
-&lt;p&gt;I’ll give a quick crash course in medicinal chemistry right here, but I strongly suggest any reader to read the first 4 chapters of &lt;em&gt;An Introduction to Medicinal Chemistry&lt;/em&gt; by Graham L. Patrick.&lt;/p&gt;
-
-&lt;h2 id=&quot;functional-groups&quot;&gt;Functional Groups&lt;/h2&gt;
-
-&lt;p&gt;Almost every molecule (besides water) in a living organism is an &lt;em&gt;organic compound&lt;/em&gt;, meaning that it contains carbon. Carbon is a very versitile element, as it can form four bonds with other atoms. This means that is can form complicated structures. Despite its versitility, carbon barely contributes to the reactivity of a molecule. Instead, carbon bonds with other “submolecules” called &lt;em&gt;functional groups&lt;/em&gt;. Functional groups are small groups of atoms containing elements such as nitrogen and oxygen that provide the chemical behavior of a compund. You can think of carbon as the skeleton of an organic compund (since it only provides the molecule its structure) and the functional groups as the organs (since they provide the molecule its functionality).&lt;/p&gt;
-
-&lt;p&gt;For example, the carbon skeleton of an amino acid usuall exhibs no chemical behavior. However, the skeleton is bonded to an ammonia functional group, which provides the molecule an acidic behavior, and a carboxyl function group, which provides the molecule a basic behavior.&lt;/p&gt;
-
-&lt;h2 id=&quot;intermolecular-and-intramolecular-forces&quot;&gt;Intermolecular and Intramolecular Forces&lt;/h2&gt;
-
-&lt;p&gt;Intermolecular and intramolecular forces are forces between molecules and inside a molecule specifically. Take water, for instnace, which is shaped like H-O-H where H and O are hydrogen and oxygen atoms respectively. For fancy chemistry reasons, the oxygen atom has a negative charge and the hydrogen atoms have a positive charge. This imbalance of charge creates an attractive property between the hydrogen atom of one water molecule and the oxygen atom of another, forming a &lt;em&gt;hydrogen bond&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Another type of bonding is called Van der Waals interactions. Atoms have a cloud of electrons around them, and sometimes they get close by enough that there is interaction between these electrons.&lt;/p&gt;
-
-&lt;h2 id=&quot;proteins-and-folding&quot;&gt;Proteins and Folding&lt;/h2&gt;
-
-&lt;p&gt;A protein is a &lt;em&gt;macromolecule&lt;/em&gt;, meaning that it is made up of hundereds of atoms and bonds. Despite this complexity, a protein is made up of a few reduimentary carbon structures. For example, proteins are usually made up of peptide bonds, which are a few peices of carbon connected to each other to make a chain-like strucutre. Functional groups are attached on these chains and have intramolecular interaction with each other. This causes the long chain of proteins to bend into a complex 3D structure like the one below (taken from Chemistry LibreTexts):&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/cheminformatics/folding.png&quot; alt=&quot;Protein Folding&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;This is called &lt;em&gt;folding&lt;/em&gt;. The shape formed can have “holes” in it, where our drug can enter and bond in to produce an effect. There are many ways for a molecule to do this, and relative translations and orientations are variables to consider. The goal of docking is the find the optimal bonding configurations and score them to find the best one. This becomes a &lt;em&gt;combinatorial optimization problem&lt;/em&gt;, something easily solvable using computational methods.&lt;/p&gt;
-
-&lt;h1 id=&quot;the-docking-algorithm&quot;&gt;The Docking Algorithm&lt;/h1&gt;
-
-&lt;p&gt;The algorithm used in DOCK 3.8 consists of two steps:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Orientation sampling. Here, the docking algorithm determines which translations and orientations are the most promising. This is done using a graph-matching algorithm.&lt;/li&gt;
-  &lt;li&gt;Chem scoring. Once the program samples an orientation, it calculates a score of how “good” it is. This score takes into account intermolecular forces.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Scoring is an intensive process, and many scores have to be calculated to determine the best one. For reference, billions of molecules have to scored to produce any promising results. To improve performance, DOCK 3.8 uses orientation pruning and approximate scoring equations rooted in physics. Even with these optimizations, docking is slow, approximately taking 1 s/mol/core.&lt;/p&gt;
-
-&lt;h2 id=&quot;orientation-sampling&quot;&gt;Orientation Sampling&lt;/h2&gt;
-
-&lt;p&gt;TODO&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="cheminformatics" /><summary type="html">Molecular docking is a class of algorithms that predict how proteins create bonds with small molecules called ligands. Docking is an important tool in drug discovery. This posts gives a brief description of the algorithm used in UCSF’s DOCK project for non-chemistry majors.</summary></entry><entry><title type="html">BVH Traversal Algorithms</title><link href="http://localhost:4000/posts/gpu/2022-07-22-traversal_algos/" rel="alternate" type="text/html" title="BVH Traversal Algorithms" /><published>2022-07-22T00:00:00-07:00</published><updated>2022-07-22T00:00:00-07:00</updated><id>http://localhost:4000/posts/gpu/traversal_algos</id><content type="html" xml:base="http://localhost:4000/posts/gpu/2022-07-22-traversal_algos/">&lt;p&gt;Designing Algorithms that traverse BVHs efficiently on the GPU is no easy task. Porting the usual CPU algorithms for traversal will not work well at all, unless you enjoy horrible performance along with low hardware utilization. Thankfully, some smart people have already created efficient traversal methods, so we do not need to waste our time getting a degree in GPU programming to make ray tracing work fast. In this blog post, I begin by first going over some of the basics of how GPUs work, and then move onto making your traversal more efficient.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-02-05T12:31:25-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Saad’s blog</title><subtitle>Home</subtitle><author><name>Saad Amin</name></author><entry><title type="html">BVH Traversal Algorithms</title><link href="http://localhost:4000/blogs/gpu_traversal_algos" rel="alternate" type="text/html" title="BVH Traversal Algorithms" /><published>2022-07-22T00:00:00-07:00</published><updated>2022-07-22T00:00:00-07:00</updated><id>http://localhost:4000/blogs/traversal_algos</id><content type="html" xml:base="http://localhost:4000/blogs/gpu_traversal_algos">&lt;p&gt;In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.&lt;/p&gt;
 
 &lt;h1 id=&quot;a-quick-primer-on-how-gpus-crunch-numbers-and-stuff&quot;&gt;A Quick Primer on How GPUs Crunch Numbers and Stuff&lt;/h1&gt;
 
@@ -144,31 +99,33 @@
 &lt;ol&gt;
   &lt;li&gt;Timo Aila and Samuli Laine. 2009. Understanding the Efficiency of Ray Traversal on GPUs. In &lt;em&gt;Proceedings of the Conference on High Performance Graphics 2009&lt;/em&gt; (HPG ’09), Association for Computing Machinery, New Orleans, Louisiana, 145–149. DOI:https://doi.org/10.1145/1572769.1572792&amp;lt;&lt;/li&gt;
   &lt;li&gt;Kshitij Gupta, Jeff A. Stuart, and John D. Owens. 2012. A study of Persistent Threads style GPU programming for GPGPU workloads. In &lt;em&gt;2012 Innovative Parallel Computing&lt;/em&gt; (InPar), 1–14. DOI:https://doi.org/10.1109/InPar.2012.6339596&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Saad Amin</name></author><category term="gpu" /><summary type="html">Designing Algorithms that traverse BVHs efficiently on the GPU is no easy task. Porting the usual CPU algorithms for traversal will not work well at all, unless you enjoy horrible performance along with low hardware utilization. Thankfully, some smart people have already created efficient traversal methods, so we do not need to waste our time getting a degree in GPU programming to make ray tracing work fast. In this blog post, I begin by first going over some of the basics of how GPUs work, and then move onto making your traversal more efficient.</summary></entry><entry><title type="html">Minecraft Shader Tutorial 4 - Advanced Shadows</title><link href="http://localhost:4000/posts/shaders/2021-02-23-mc_shader_tut4/" rel="alternate" type="text/html" title="Minecraft Shader Tutorial 4 - Advanced Shadows" /><published>2021-02-23T00:00:00-08:00</published><updated>2021-02-23T00:00:00-08:00</updated><id>http://localhost:4000/posts/shaders/mc_shader_tut4</id><content type="html" xml:base="http://localhost:4000/posts/shaders/2021-02-23-mc_shader_tut4/">&lt;p&gt;In this tutorial I will make our shadows look actually good. I will be covering things like PCF, shadow distortion, and transparent shadows.&lt;/p&gt;
+&lt;/ol&gt;</content><author><name>Saad Amin</name></author><category term="gpu" /><summary type="html">In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.</summary></entry><entry><title type="html">Minecraft Shaders Part 4</title><link href="http://localhost:4000/blogs/mc_shaders_part4" rel="alternate" type="text/html" title="Minecraft Shaders Part 4" /><published>2021-02-23T00:00:00-08:00</published><updated>2021-02-23T00:00:00-08:00</updated><id>http://localhost:4000/blogs/mc_shader_tut4</id><content type="html" xml:base="http://localhost:4000/blogs/mc_shaders_part4">&lt;p&gt;In this tutorial I will make our shadows look actually good. I will be covering things like PCF, shadow distortion, and transparent shadows.&lt;/p&gt;
 
-&lt;h2 id=&quot;fixing-the-low-detailed-shadows-problem&quot;&gt;Fixing the low detailed shadows problem&lt;/h2&gt;
+&lt;h1 id=&quot;fixing-the-low-detailed-shadows-problem&quot;&gt;Fixing the low detailed shadows problem&lt;/h1&gt;
 
 &lt;p&gt;Continuing from the last tutorial, our shadows still look blocky. There is a fix to this. We can use a technique known as shadow distortion. In a nutshell, what shadow distortion does is distort the shadow clip space verticies in a way that verticies close to the center become bigger while ones far away become smaller. The advantage of this is that the space on the shadow map gets used more effectively. For those of you who know what cascaded shadow mapping is, think of shadow distortion being a super lazy alternative that only requires one shadow pass instead of N cascades number of passes.&lt;/p&gt;
 
+&lt;p&gt;Mathematically, we can do this by &lt;em&gt;almost&lt;/em&gt; normalizing the shadow space positions with respect to the center of the shadow map. If we fully normalize the vectors, the the entire shadow map would be on a circle around the center. However, if we reduce the distance we divide by just a bit it, it will stretch out the center of the shadow map towards the circle, hence making it bigger.&lt;/p&gt;
+
 &lt;p&gt;Let’s look at the equations for shadow distortion. We first need to calculate distance of a vertex from the center of clip space, which is (0, 0). This can be done simply with the pythagorean theorem.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://www.sciweavers.org/upload/Tex2Img_1613701421/eqn.png&quot; alt=&quot;Distance Formula&quot; /&gt;&lt;/p&gt;
+\[d=\sqrt{x^2+y^2}\]
 
 &lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;y&lt;/code&gt; are the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;y&lt;/code&gt; coordinates of the vertex. From this we can calculate how strong we want to distort the verticies using a simple mix function:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://www.sciweavers.org/upload/Tex2Img_1613701650/eqn.png&quot; alt=&quot;Distortion Factor&quot; /&gt;&lt;/p&gt;
+\[f=mix(1, d, a)\]
 
 &lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a&lt;/code&gt; is how strong distortion is overall and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f&lt;/code&gt; is the distortion factor. We use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;a = 0.9&lt;/code&gt;. Then we can transform the vertex like so:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://www.sciweavers.org/upload/Tex2Img_1613701824/eqn.png&quot; alt=&quot;Distortion Transformation&quot; /&gt;&lt;/p&gt;
+\[x&apos; = {x \over f}\]
 
-&lt;p&gt;Where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p&lt;/code&gt; is the input vertex position in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xy&lt;/code&gt; terms and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;p′&lt;/code&gt; is the transformed output vertex, which is also &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xy&lt;/code&gt;.&lt;/p&gt;
+\[y&apos; = {y \over f}\]
 
-&lt;h3 id=&quot;include-directive&quot;&gt;Include directive&lt;/h3&gt;
+&lt;h2 id=&quot;include-directive&quot;&gt;Include directive&lt;/h2&gt;
 
 &lt;p&gt;Before we implement it in code, we should know of how the include directive works. If we were to implement it without the use of the include directive, we would need to have the distortion equations in both &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shadow.vsh&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite.fsh&lt;/code&gt;. It is a lot easier to have them in one file. Note to the reader: include directives don’t work like how they usually work in C/C++. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#include &quot;path&quot;&lt;/code&gt; is a relative include and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#include &quot;/path&quot;&lt;/code&gt; is relative to you &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shaders&lt;/code&gt; folder.&lt;/p&gt;
 
-&lt;h3 id=&quot;the-implementation&quot;&gt;The Implementation&lt;/h3&gt;
+&lt;h2 id=&quot;the-implementation&quot;&gt;The Implementation&lt;/h2&gt;
 
 &lt;p&gt;I put my distortion code in a file called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;distort.glsl&lt;/code&gt;. Here is the distortion equations in code.&lt;/p&gt;
 
@@ -198,13 +155,13 @@
 
 &lt;p&gt;If we reload our shader, our shadows will start to look much nicer:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/improved_shadows.png&quot; alt=&quot;Improved and Detailed Shadows&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part4/improved_shadows.png&quot; alt=&quot;Improved and Detailed Shadows&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;transparent-shadows&quot;&gt;Transparent shadows&lt;/h2&gt;
+&lt;h1 id=&quot;transparent-shadows&quot;&gt;Transparent shadows&lt;/h1&gt;
 
 &lt;p&gt;If we look at images in which case light it passing through transparent objects like stained glass, we notice that the shadows aren’t colored and the stained glass acts if it was opaque.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/opaque_shadows.png&quot; alt=&quot;Opaque Shadows&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part4/opaque_shadows.png&quot; alt=&quot;Opaque Shadows&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can fix this by using the shadow color textures. There are two shadow color textures: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shadowcolor0&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shadowcolor1&lt;/code&gt;. The shadow pass automatically writes to these textures. We will write the diffuse albedo to them. To do that we need to pass the texture coordinates and biome color from the shadow vertex shader to the shadow fragment shader:&lt;/p&gt;
 
@@ -285,13 +242,13 @@
 
 &lt;p&gt;After that, we return &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TransmittedColor&lt;/code&gt; if there is no opaque object. If we reload the shader, we get something that looks a bit like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/transparent_shadows.png&quot; alt=&quot;Transparent Shadows&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part4/transparent_shadows.png&quot; alt=&quot;Transparent Shadows&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;soft-shadows&quot;&gt;Soft Shadows&lt;/h2&gt;
+&lt;h1 id=&quot;soft-shadows&quot;&gt;Soft Shadows&lt;/h1&gt;
 
 &lt;p&gt;If we look at our shadows right now, we will notice that they look hard, instead of soft, which is both visually unappealing and unrealistic.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/hard_shadows.png&quot; alt=&quot;Hard Shadows&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part4/hard_shadows.png&quot; alt=&quot;Hard Shadows&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can fix this by using a technique called percentage close filtering, or PCF for short. PCF averages results for the shadow query in areas around and on top of teh fragment instead of just on it. It isn’t too hard to implement:&lt;/p&gt;
 
@@ -316,7 +273,7 @@
 
 &lt;p&gt;It looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/pcf_shadows.png&quot; alt=&quot;PCF Shadows&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part4/pcf_shadows.png&quot; alt=&quot;PCF Shadows&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can still see “lines” since each sample gets average evenly. We can do complex tricks like bilinear filtering to get rid of the issue, but we can also do simpler things like applying a random rotation to the offset. Optifine provides a noise texture called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;noisetex&lt;/code&gt; for linear sampling of random noise. The resolution for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;noisetex&lt;/code&gt; can be set like this:&lt;/p&gt;
 
@@ -340,15 +297,15 @@
 
 &lt;p&gt;And here are the results:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/pcf_rng_shadows.png&quot; alt=&quot;Randomly Rotated PCF Shadows&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part4/pcf_rng_shadows.png&quot; alt=&quot;Randomly Rotated PCF Shadows&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;These shadows are much more smoother and much more visually appealing.&lt;/p&gt;
 
-&lt;h2 id=&quot;going-further&quot;&gt;Going further&lt;/h2&gt;
+&lt;h1 id=&quot;going-further&quot;&gt;Going further&lt;/h1&gt;
 
-&lt;p&gt;Realistically nobody should use a box kernel for shadow mapping. It’s hard to control and sample counts increate rapidly. It also doesn’t look too good in certain cases. However, it is possible to throw out a box filter for a spherical filter. These types of methods use a vogel or poisson disk to sample the shadows. I’ll leave this as an exercise to the reader to research and implement these sampling methods.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">In this tutorial I will make our shadows look actually good. I will be covering things like PCF, shadow distortion, and transparent shadows.</summary></entry><entry><title type="html">Minecraft Shader Tutorial 3 - Lighting and Shadows</title><link href="http://localhost:4000/posts/shaders/2021-02-21-mc_shader_tut3/" rel="alternate" type="text/html" title="Minecraft Shader Tutorial 3 - Lighting and Shadows" /><published>2021-02-21T00:00:00-08:00</published><updated>2021-02-21T00:00:00-08:00</updated><id>http://localhost:4000/posts/shaders/mc_shader_tut3</id><content type="html" xml:base="http://localhost:4000/posts/shaders/2021-02-21-mc_shader_tut3/">&lt;p&gt;In this tutorial we will look at implementing the lightmap and shadows.&lt;/p&gt;
+&lt;p&gt;Realistically nobody should use a box kernel for shadow mapping. It’s hard to control and sample counts increate rapidly. It also doesn’t look too good in certain cases. However, it is possible to throw out a box filter for a spherical filter. These types of methods use a vogel or poisson disk to sample the shadows. I’ll leave this as an exercise to the reader to research and implement these sampling methods.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">In this tutorial I will make our shadows look actually good. I will be covering things like PCF, shadow distortion, and transparent shadows.</summary></entry><entry><title type="html">Minecraft Shaders Part 3</title><link href="http://localhost:4000/blogs/mc_shaders_part3" rel="alternate" type="text/html" title="Minecraft Shaders Part 3" /><published>2021-02-21T00:00:00-08:00</published><updated>2021-02-21T00:00:00-08:00</updated><id>http://localhost:4000/blogs/mc_shader_tut3</id><content type="html" xml:base="http://localhost:4000/blogs/mc_shaders_part3">&lt;p&gt;In this tutorial we will look at implementing the lightmap and shadows.&lt;/p&gt;
 
-&lt;h2 id=&quot;the-lightmap&quot;&gt;The lightmap&lt;/h2&gt;
+&lt;h1 id=&quot;the-lightmap&quot;&gt;The lightmap&lt;/h1&gt;
 
 &lt;p&gt;In the gbuffers vertex shader, the lightmap is accesible by using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_MultiTexCoord1&lt;/code&gt;. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;s&lt;/code&gt; channel is the torch lightmap, and the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;t&lt;/code&gt; channel is the sky lightmap..However this value is not in the range [0, 1]. Instead it is in the range [0, 15], but that can change depending on the version of Minecraft you are playing on. Thankfully, if we multiply our lightmap by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_TextureMatrix[1]&lt;/code&gt; to move it into the range [0, 1]. Well actually, not quite that range. It gets moved into the range [1.05 / 32, 32/33.05]. We can do some quick math to get it into the range [0, 1]. We have to also declare a new varying variable, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LightmapCoords&lt;/code&gt;, to move the lightmap values from the vertex shader to the fragment shader. It looks something like this:&lt;/p&gt;
 
@@ -391,8 +348,8 @@
 
 &lt;p&gt;If we visualise the lightmap, we see something like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/torch_lightmap.png&quot; alt=&quot;Lightmap visualised&quot; /&gt;
-&lt;img src=&quot;images/sky_lightmap.png&quot; alt=&quot;Lightmap visualised&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part3/torch_lightmap.png&quot; alt=&quot;Lightmap visualised&quot; /&gt;
+&lt;img src=&quot;/assets/images/mc_shaders_part3/sky_lightmap.png&quot; alt=&quot;Lightmap visualised&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;As you can see, in the first screenshot, while looking at glowstone, the lightmap looks more redder since there is a higher torch lighting value there. In the second screenshot, the part under the overhang thing looks darker since there is not torch light map and those blocks have less exposure to the sky. This may look good, but the rate at which the lightmap attenuates is not very realistic. We will have to modify the lightmap with out own functions. I will be using these:&lt;/p&gt;
 
@@ -417,8 +374,8 @@
 
 &lt;p&gt;And this time we get much better results:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/better_torch_lightmap.png&quot; alt=&quot;Lightmap visualised with better attenuation&quot; /&gt;
-&lt;img src=&quot;images/better_sky_lightmap.png&quot; alt=&quot;Lightmap visualised with better attenuation&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part3/better_torch_lightmap.png&quot; alt=&quot;Lightmap visualised with better attenuation&quot; /&gt;
+&lt;img src=&quot;/assets/images/mc_shaders_part3/better_sky_lightmap.png&quot; alt=&quot;Lightmap visualised with better attenuation&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Now we have to get the color of the lighting from the lightmap value. I use this function to do so:&lt;/p&gt;
 
@@ -452,18 +409,18 @@
 
 &lt;p&gt;If we reload our shader with F3+R we get something that looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/lightmap_demo_torch.png&quot; alt=&quot;Lightmap demo&quot; /&gt;
-&lt;img src=&quot;images/lightmap_demo_sky.png&quot; alt=&quot;Lightmap demo&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part3/lightmap_demo_torch.png&quot; alt=&quot;Lightmap demo&quot; /&gt;
+&lt;img src=&quot;/assets/images/mc_shaders_part3/lightmap_demo_sky.png&quot; alt=&quot;Lightmap demo&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;shadows&quot;&gt;Shadows&lt;/h2&gt;
+&lt;h1 id=&quot;shadows&quot;&gt;Shadows&lt;/h1&gt;
 
 &lt;p&gt;Something doesn’t look right in the second screenshot. The issue is that there are no shadows. In this section we will learn how shadows work and have a basic implemenation of them.&lt;/p&gt;
 
-&lt;h3 id=&quot;shadow-mapping&quot;&gt;Shadow Mapping&lt;/h3&gt;
+&lt;h2 id=&quot;shadow-mapping&quot;&gt;Shadow Mapping&lt;/h2&gt;
 
 &lt;p&gt;Most games use a technique known as “shadow mapping” to calculate shadows in their games. This technique dates back all the way to 1978. In shadow mapping, we first render the scene from the light’s point of view into a depth map. This depth map is known as the shadow map. It looks something like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/shadow_map.png&quot; alt=&quot;The shadowmap&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part3/shadow_map.png&quot; alt=&quot;The shadowmap&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The shadow map is in a coordinate system know as “shadow space”. Then, we render the scene from the player’s point of view. When doing the lighting calculations, we transform the fragment’s to shadow space. We can use the XY coordinates of the transformed position to sample the depth from the shadowmap, and the comapre it to the current fragemnt’s depth.&lt;/p&gt;
 
@@ -472,7 +429,7 @@
 &lt;div class=&quot;language-glsl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shadowMapResolution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1024&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;the-shadow-pass&quot;&gt;The Shadow Pass&lt;/h3&gt;
+&lt;h2 id=&quot;the-shadow-pass&quot;&gt;The Shadow Pass&lt;/h2&gt;
 
 &lt;p&gt;Optifine provides an optional shader stage called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shadow&lt;/code&gt;. It runs for everything (blocks, entities, etc). Since we are only going to be recording the depth values to the depth map, it looks like this:&lt;/p&gt;
 
@@ -489,7 +446,7 @@
 &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;calculating-the-shadowing&quot;&gt;Calculating the shadowing&lt;/h3&gt;
+&lt;h2 id=&quot;calculating-the-shadowing&quot;&gt;Calculating the shadowing&lt;/h2&gt;
 
 &lt;p&gt;In &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;, we create a new function called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GetShadow&lt;/code&gt;. It returns a floating point value that is 1 is the fragment is not in shadow, and 0 if it is.&lt;/p&gt;
 
@@ -498,7 +455,7 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h4 id=&quot;reconstructing-the-position&quot;&gt;Reconstructing the position&lt;/h4&gt;
+&lt;h3 id=&quot;reconstructing-the-position&quot;&gt;Reconstructing the position&lt;/h3&gt;
 
 &lt;p&gt;Since we haven’t written the fragment’s position to a color texture, we can’t just sample from one color texture and have the position that way. However, Optifine provides the depth texture taken from the eye’s point of view. It is called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;depthtex0&lt;/code&gt; (and if you are wondering, there is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;depthtex1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;depthtex2&lt;/code&gt;, we will look at those in the next chapter). We also have the texture coordinates, so we can contruct a clip space coordinate using:&lt;/p&gt;
 
@@ -537,7 +494,7 @@
 &lt;div class=&quot;language-glsl highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;vec4&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ShadowSpace&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shadowProjection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shadowModelView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;World&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h4 id=&quot;checking-for-shadowing&quot;&gt;Checking for Shadowing&lt;/h4&gt;
+&lt;h3 id=&quot;checking-for-shadowing&quot;&gt;Checking for Shadowing&lt;/h3&gt;
 
 &lt;p&gt;However this is not shadow “screen” space. However, we can covert it to shadow screen space easily:&lt;/p&gt;
 
@@ -561,7 +518,7 @@
 
 &lt;p&gt;If you reload the shader, you will probably get something that looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/shadow_acne.png&quot; alt=&quot;Shadow acne&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part3/shadow_acne.png&quot; alt=&quot;Shadow acne&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This weird thing is called shadow acne and is caused by a result of lack of shadow map information. We can fix this with a small bias in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GetShadow&lt;/code&gt;:&lt;/p&gt;
 
@@ -571,11 +528,11 @@
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/no_shadow_acne.png&quot; alt=&quot;Shadow bias&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part3/no_shadow_acne.png&quot; alt=&quot;Shadow bias&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You may also notice that the shadows look blobby. This is because the resolution of our shadow map is low. In the next tutorial, we will look at fixing this issue using a technique called shadow distortion.&lt;/p&gt;
 
-&lt;h2 id=&quot;fixing-the-sky&quot;&gt;Fixing the Sky&lt;/h2&gt;
+&lt;h1 id=&quot;fixing-the-sky&quot;&gt;Fixing the Sky&lt;/h1&gt;
 
 &lt;p&gt;With the depth texture we can fix the sky very easily. The sky’s depth is always 1.0, so right after we get the albedo, we can take advantage of early return to do this:&lt;/p&gt;
 
@@ -598,21 +555,21 @@
 &lt;span class=&quot;kt&quot;&gt;vec3&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Diffuse&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Albedo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LightmapColor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NdotL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;GetShadow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Depth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Ambient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/fixed_sky.png&quot; alt=&quot;Fixed sky&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part3/fixed_sky.png&quot; alt=&quot;Fixed sky&quot; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
 
-&lt;p&gt;We have done shadow mapping and lightmap lighting in Minecraft shaders. In the next tutorial we will see how we can improve our shadows.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">In this tutorial we will look at implementing the lightmap and shadows.</summary></entry><entry><title type="html">Minecraft Shader Tutorial 2 - The Gbuffers and Composite Programs</title><link href="http://localhost:4000/posts/shaders/2021-02-17-mc_shader_tut2/" rel="alternate" type="text/html" title="Minecraft Shader Tutorial 2 - The Gbuffers and Composite Programs" /><published>2021-02-17T00:00:00-08:00</published><updated>2021-02-17T00:00:00-08:00</updated><id>http://localhost:4000/posts/shaders/mc_shader_tut2</id><content type="html" xml:base="http://localhost:4000/posts/shaders/2021-02-17-mc_shader_tut2/">&lt;p&gt;Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting&lt;/p&gt;
+&lt;p&gt;We have done shadow mapping and lightmap lighting in Minecraft shaders. In the next tutorial we will see how we can improve our shadows.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">In this tutorial we will look at implementing the lightmap and shadows.</summary></entry><entry><title type="html">Minecraft Shaders Part 2</title><link href="http://localhost:4000/blogs/mc_shaders_part2" rel="alternate" type="text/html" title="Minecraft Shaders Part 2" /><published>2021-02-17T00:00:00-08:00</published><updated>2021-02-17T00:00:00-08:00</updated><id>http://localhost:4000/blogs/mc_shader_tut2</id><content type="html" xml:base="http://localhost:4000/blogs/mc_shaders_part2">&lt;p&gt;Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting&lt;/p&gt;
 
-&lt;h2 id=&quot;what-is-gbuffers&quot;&gt;What is gbuffers?&lt;/h2&gt;
+&lt;h1 id=&quot;what-is-gbuffers&quot;&gt;What is gbuffers?&lt;/h1&gt;
 
 &lt;p&gt;The gbuffers programs are the main geometry passes. In gbuffers, you can render entities, particals, blocks, etc from the point of view of the player. There are different types of gbuffers programs. For example, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gbuffers_terrain&lt;/code&gt; renders blocks like stone and dirt, while &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gbuffers_entities&lt;/code&gt; renders entities like mobs and chests. In gbuffers you can use them for forward rendering or use them as the gbuffers stage in a deferred rendering pipeline.&lt;/p&gt;
 
-&lt;h2 id=&quot;what-is-compsite&quot;&gt;What is compsite?&lt;/h2&gt;
+&lt;h1 id=&quot;what-is-composite&quot;&gt;What is composite?&lt;/h1&gt;
 
 &lt;p&gt;The composite programs are fullscreen passes that run after all the gbuffers programs have finished executing. There are 15 of them, going from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite1&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite2&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;compositeN&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite15&lt;/code&gt;. In the composite programs, you can do things like deferred lighting and post processing.&lt;/p&gt;
 
-&lt;h2 id=&quot;the-color-textures-and-concept-of-drawbuffers&quot;&gt;The color textures and concept of drawbuffers&lt;/h2&gt;
+&lt;h1 id=&quot;the-color-textures-and-concept-of-drawbuffers&quot;&gt;The color textures and concept of drawbuffers&lt;/h1&gt;
 
 &lt;p&gt;In the entire part of the shader pipeline from gbuffers to composite, you have 8 color textures to fiddle with. You can sample from them and write to them. Do note that these are the same 8 color textures no matter which part of the pipeline you are in. For example, if I wrote the albedo color to color texture 1 in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gbuffers_terrain&lt;/code&gt;, and then sampled from it in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;, I would get the albedo color of the block. You can also use this feature to move data between shader stages. For example, if I wrote the color &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vec3(0.5f)&lt;/code&gt; to color texture 2 in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;, I would get the same color if I sampled from it in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite1&lt;/code&gt;. To select which color textures you want to write to, use the following comment somewhere in the fragment shader:&lt;/p&gt;
 
@@ -642,7 +599,7 @@
 
 &lt;p&gt;See the Optifine docuementation for the full list of availble color texture formats.&lt;/p&gt;
 
-&lt;h3 id=&quot;color-texture-names&quot;&gt;Color texture names&lt;/h3&gt;
+&lt;h2 id=&quot;color-texture-names&quot;&gt;Color texture names&lt;/h2&gt;
 
 &lt;p&gt;In old shader code, you might see this:&lt;/p&gt;
 
@@ -671,7 +628,7 @@
 
 &lt;p&gt;I will not be using the legacy names in my tutorials.&lt;/p&gt;
 
-&lt;h2 id=&quot;show-me-the-code&quot;&gt;Show me the code&lt;/h2&gt;
+&lt;h1 id=&quot;show-me-the-code&quot;&gt;Show me the code&lt;/h1&gt;
 
 &lt;p&gt;Create a new shader pack. We do not want to keep the old grayscale code from the previous tutorial. Let’s start off with the vertex shader of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gbuffers_terrain&lt;/code&gt;.&lt;/p&gt;
 
@@ -708,7 +665,7 @@
 
 &lt;p&gt;Here, we specify our drawbuffers and write to them. In draw buffer index 0, we write the albedo color, and in index 1 we write the normal. We have to move our normal vector to the [0, 1] range since our color textures are going to have an unsigned integer format. I could use an signed integer format, but that is only availble in newer versions of Optifine, and floating point formats are either going to be way too large or will not have enough precision. If we run our shader as is to make sure everything is working, we run into a problem:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/broken_vegitation.png&quot; alt=&quot;Broken Vegitation&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part2/broken_vegitation.png&quot; alt=&quot;Broken Vegitation&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;This problem occurs because the textures of blocks like grass and leaves are stored as gray scale on the texture atlas. These values are expected to be multipled by a per-vertex color attribute representing biome color. Here are our fixed vertex and fragment shaders.&lt;/p&gt;
 
@@ -753,11 +710,11 @@
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_Color&lt;/code&gt; is an in-built attribute variable that, in this case, represents block color. For vegitation blocks, this is the biome color. For non-vegitative blocks, this is just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vec4(1.0f)&lt;/code&gt;. Here is the result of our fix:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/fixed_vegitation.png&quot; alt=&quot;Fixed Vegitation&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part2/fixed_vegitation.png&quot; alt=&quot;Fixed Vegitation&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Everything is looking much nicer now. We also get free ambient occlusion by doing this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/free_ao.png&quot; alt=&quot;Free Ambient Occlusion&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part2/free_ao.png&quot; alt=&quot;Free Ambient Occlusion&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Look closely at the places where a corner is formed by the intersection of blocks. You will notice that it looks a bit darker. This is because the color ends up getting darkened in occluded spots. One thing to note is that both the block color and texture atlas have display gamma baked into them. That is, if you want to do any lighting calculations on them, you have to convert your albedo from gamma sRGB to linear sRGB. We will do that in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;.&lt;/p&gt;
 
@@ -812,25 +769,25 @@ const int colortex1Format = RGBA16;
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sunPosition&lt;/code&gt; here is the direction of the sun. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;colortex0&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;colortex1&lt;/code&gt; are the color textures we wrote to in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gbuffers_terrain&lt;/code&gt;. After that we define out color texture formats. We will be using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RGBA16&lt;/code&gt;. Notice how it was declared as a comment. It still works this way. After that, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sunPathRotation&lt;/code&gt; is a variable Optifine reads. It describes how titled the sun is from an overhead path in degrees. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Ambient&lt;/code&gt; is an ambient lighting factor we will use in our lighting calculations. Now we reach &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;main&lt;/code&gt;. We first sample the albedo and then account for gamma correction. We also sample the normal and bring it back to teh [-1, 1] range. I normalize it jsut be sure it is a unit vector. Then I compute the dot product between the normal vector and the sun direction. For some reason, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sunPosition&lt;/code&gt; is not a unit vector so I have to normalize it. Then I compute the lighting value and write to drawbuffer 0. Then this value gets read by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final&lt;/code&gt;, and it gets gamma corrected and written to the screen. Here is what our shader looks like now:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;images/simple_diffuse.png&quot; alt=&quot;Simple Diffuse Lighting&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/mc_shaders_part2/simple_diffuse.png&quot; alt=&quot;Simple Diffuse Lighting&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Notice how blocks facing away from the sun are lit less that those that are. Also notice how the sky looks completely broken. This is because &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt; is a fullscreen pass and that doesn’t mean it does not run for the sky as well. We will fix this bug in a later tutorial. In the next tutorial we will look at using the lightmap to account for both torch and sky lighting, and we will add shadows to our shaders.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting</summary></entry><entry><title type="html">Minecraft Shader Tutorial 1 - The Final Program</title><link href="http://localhost:4000/posts/shaders/2021-02-14-mc_shader_tut1/" rel="alternate" type="text/html" title="Minecraft Shader Tutorial 1 - The Final Program" /><published>2021-02-14T00:00:00-08:00</published><updated>2021-02-14T00:00:00-08:00</updated><id>http://localhost:4000/posts/shaders/mc_shader_tut1</id><content type="html" xml:base="http://localhost:4000/posts/shaders/2021-02-14-mc_shader_tut1/">&lt;p&gt;In this tutorial we explore the most basic fullscreen pass: The final pass.&lt;/p&gt;
+&lt;p&gt;Notice how blocks facing away from the sun are lit less that those that are. Also notice how the sky looks completely broken. This is because &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt; is a fullscreen pass and that doesn’t mean it does not run for the sky as well. We will fix this bug in a later tutorial. In the next tutorial we will look at using the lightmap to account for both torch and sky lighting, and we will add shadows to our shaders.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting</summary></entry><entry><title type="html">Minecraft Shaders Part 1</title><link href="http://localhost:4000/blogs/mc_shaders_part1" rel="alternate" type="text/html" title="Minecraft Shaders Part 1" /><published>2021-02-14T00:00:00-08:00</published><updated>2021-02-14T00:00:00-08:00</updated><id>http://localhost:4000/blogs/mc_shader_tut1</id><content type="html" xml:base="http://localhost:4000/blogs/mc_shaders_part1">&lt;p&gt;In this tutorial we explore the most basic fullscreen pass: The final pass.&lt;/p&gt;
 
-&lt;h2 id=&quot;basic-file-structure-of-a-shader&quot;&gt;Basic file structure of a shader&lt;/h2&gt;
+&lt;h1 id=&quot;basic-file-structure-of-a-shader&quot;&gt;Basic file structure of a shader&lt;/h1&gt;
 
 &lt;p&gt;Before we start learning about &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final&lt;/code&gt;, we need to understand the basic file structure of a shader pack. Within a shader pack, there is a folder called “shaders”. This is where all the shader files goes. The files have the extension &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.vsh&lt;/code&gt; for vertex shaders or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.fsh&lt;/code&gt; for fragment shaders. The shader file name corresponds to a shader program name. For example, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final.vsh&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final.fsh&lt;/code&gt; are part of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final&lt;/code&gt; shader program.&lt;/p&gt;
 
 &lt;p&gt;To create your own shader, first create a folder. The name of the folder is the name you want to give your shader. Then inside that folder, create another folder called “shaders”. Within &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;shaders&lt;/code&gt;, you can start creating the shader files. If you are confused about file structure of a shader pack, you can always look at another shader pack for reference.&lt;/p&gt;
 
-&lt;h2 id=&quot;what-is-final&quot;&gt;What is final?&lt;/h2&gt;
+&lt;h1 id=&quot;what-is-final&quot;&gt;What is final?&lt;/h1&gt;
 
 &lt;p&gt;final is a fullscreen pass. It is the last pass in the shader pipeline. Whatever color final outputs is the color that gets displayed on your screen. Here, you can do certain post processing effects like bluring, tone mapping, or gamma correction.&lt;/p&gt;
 
-&lt;h2 id=&quot;what-other-fullscreen-passes-are-there&quot;&gt;What other fullscreen passes are there?&lt;/h2&gt;
+&lt;h1 id=&quot;what-other-fullscreen-passes-are-there&quot;&gt;What other fullscreen passes are there?&lt;/h1&gt;
 
 &lt;p&gt;In Optifine, there are 3 types of fullscreen passes. They are called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;deferred&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;final&lt;/code&gt; is the fullscreen pass we just covered. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;deferred&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;compsite&lt;/code&gt; are fullscreen passes we will cover in later tutorials.&lt;/p&gt;
 
-&lt;h2 id=&quot;show-me-the-code&quot;&gt;Show me the code&lt;/h2&gt;
+&lt;h1 id=&quot;show-me-the-code&quot;&gt;Show me the code&lt;/h1&gt;
 
 &lt;p&gt;We will be implementing a basic shader that converts the colors on your screen to grayscale. Let’s start off with the vertex shader. We first start with the version declratation. We will be using GLSL version 120&lt;/p&gt;
 
@@ -912,9 +869,9 @@ const int colortex1Format = RGBA16;
 
 &lt;p&gt;&lt;img src=&quot;images/demo.png&quot; alt=&quot;Image of the Grayscale Shader&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Although it is not much, it’s definitely a start on your shader programming journey! In the next tutorial, we will do some block rendering and learn about &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;, which is the other fullscreen pass I mentioned.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">In this tutorial we explore the most basic fullscreen pass: The final pass.</summary></entry><entry><title type="html">Minecraft Shader Tutorial 0 - Prerequisites</title><link href="http://localhost:4000/posts/shaders/2021-02-13-mc_shader_tut0/" rel="alternate" type="text/html" title="Minecraft Shader Tutorial 0 - Prerequisites" /><published>2021-02-13T00:00:00-08:00</published><updated>2021-02-13T00:00:00-08:00</updated><id>http://localhost:4000/posts/shaders/mc_shader_tut0</id><content type="html" xml:base="http://localhost:4000/posts/shaders/2021-02-13-mc_shader_tut0/">&lt;p&gt;Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.&lt;/p&gt;
+&lt;p&gt;Although it is not much, it’s definitely a start on your shader programming journey! In the next tutorial, we will do some block rendering and learn about &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;composite&lt;/code&gt;, which is the other fullscreen pass I mentioned.&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">In this tutorial we explore the most basic fullscreen pass: The final pass.</summary></entry><entry><title type="html">Minecraft Shaders Part 0</title><link href="http://localhost:4000/blogs/mc_shaders_part0" rel="alternate" type="text/html" title="Minecraft Shaders Part 0" /><published>2021-02-13T00:00:00-08:00</published><updated>2021-02-13T00:00:00-08:00</updated><id>http://localhost:4000/blogs/mc_shader_tut0</id><content type="html" xml:base="http://localhost:4000/blogs/mc_shaders_part0">&lt;p&gt;Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.&lt;/p&gt;
 
-&lt;h2 id=&quot;graphics-in-minecraft&quot;&gt;Graphics in Minecraft&lt;/h2&gt;
+&lt;h1 id=&quot;opengl-and-glsl&quot;&gt;OpenGL and GLSL&lt;/h1&gt;
 
 &lt;p&gt;Minecraft is written in a really old version of OpenGL, and shaders are only available via OpenGL extensions. Since Minecraft is written in such an old OpenGL version, many (old) shaders are written in GLSL version 120. For simplicity’s sake, I will be also writing my shaders in version 120. Many things very different between version 120 and more mordern versions of GLSL. Here are a few examples:&lt;/p&gt;
 
@@ -925,11 +882,11 @@ const int colortex1Format = RGBA16;
   &lt;li&gt;If you want to write to a render target you must use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragColor&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragData&lt;/code&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragData&lt;/code&gt; is an array of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vec4&lt;/code&gt; with size of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;GL_MAX_COLOR_ATTACHMENTS&lt;/code&gt; (typically 8, you can check the &lt;a href=&quot;https://opengl.gpuinfo.org/displaycapability.php?name=GL_MAX_COLOR_ATTACHMENTS&quot;&gt;OpenGL GPU database&lt;/a&gt; for more details). Each element of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragData&lt;/code&gt; corresponds to a color attachment. For example, the first color attachment is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragData[0]&lt;/code&gt;, the second one is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragData[1]&lt;/code&gt;, and so on. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragColor&lt;/code&gt; is like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gl_FragData&lt;/code&gt; except it writes to all color attachments.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;rendering-the-blocks&quot;&gt;Rendering the blocks&lt;/h3&gt;
+&lt;h1 id=&quot;rendering-the-blocks&quot;&gt;Rendering the blocks&lt;/h1&gt;
 
 &lt;p&gt;Now with that out of the way, we can focus on how Minecraft actually does it’s rendering. Minecraft is a voxel game, and therefore it does not follow the normal style of rendering that is present in most games.First of all, Minecraft has to render a large amount of blocks, which could be different types of blocks. Rendering each block as it’s own draw call is a really bad idea for performance. Intancing could work, but it has it’s own limitations, besides not being present in ancient version of OpenGL at all. Instead, what Minecraft does it it batches verticies into a chunks of verticies, so each chunk becomes it’s own draw call. To texture each block, Minecraft uses a texture atlas.&lt;/p&gt;
 
-&lt;h3 id=&quot;lighting&quot;&gt;Lighting&lt;/h3&gt;
+&lt;h1 id=&quot;lighting&quot;&gt;Lighting&lt;/h1&gt;
 
 &lt;p&gt;Lighting in Minecraft is a bit different from how it is done in other games. Minecraft needs to support an arbitrary number of light sources, with the features of old OpenGL versions, and have decent performance on slow hardware like Intel iGPUs and Apple Macs. There also needs to be occlusion detection for the lights, that is, a light behind a wall cannot light up what is in front of the the wall. Doing this the “normal” way would require storing all lights in a texture and having a texture atlas of shadow maps for each light. This doesn’t support area lighting, so lighting from blocks like glowstone up close will look bad, and this would be insanely costly. Imagine how slow rendering the nether would be, since each lava block in the nether needs to be processed. Minecraft needs a different approach from this.&lt;/p&gt;
 
@@ -937,6 +894,6 @@ const int colortex1Format = RGBA16;
 
 &lt;p&gt;The lightmap alone is not enough to light the block. It somehow has to be converted to a lighting color which then has to be multiplied by the block color to obtain the final color that gets displayed on your screen. Minecraft by default uses the light map coordinates (after doing math to move them to the [0, 1] range) as texture coordinates to look up a lighting color value from a lightmap texture in the fragment shader. The lighting color value gets multiplied by the block color and then displayed on your screen. See the &lt;a href=&quot;https://github.com/sp614x/optifine/blob/master/OptiFineDoc/doc/custom_lightmaps.txt&quot;&gt;Optifine documentation&lt;/a&gt; on this for more details. We won’t be using the light map coordinates to look up from the lightmap texture. We will be doing our own math to calculate the lighting value. This is what most other shaders do anyway (and when I mean most I mean 99.9%, if it doesn’t, then it’s probably a really bad or super old no-name shader)&lt;/p&gt;
 
-&lt;h2 id=&quot;how-shaders-work&quot;&gt;How Shaders Work&lt;/h2&gt;
+&lt;h1 id=&quot;how-shaders-work&quot;&gt;How Shaders Work&lt;/h1&gt;
 
 &lt;p&gt;To understand how shaders work, lets understand how the shader pipeline works. The shader pipeline is comprised of a bunch of fullscreen passes, a few block and entity rendering passes, and a shadow pass. What shader packs do is define what goes on in each pass of the pipeline. To give an example, let’s say I wanted to do a blur of what I see on my screen. I could write a fullscreen pass that does that. If this sounds confusing, don’t worry, it will become much more easier to understand in the coming tutorials. (note: if any exprienced shader dev has a better explanation of this part, please contact me with the better explanation so I can update this section with it)&lt;/p&gt;</content><author><name>Saad Amin</name></author><category term="shaders" /><summary type="html">Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.</summary></entry></feed>

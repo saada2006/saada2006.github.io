@@ -1,0 +1,543 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Minecraft Shaders Part 3 - Saad’s blog</title>
+<meta name="description" content="In this tutorial we will look at implementing the lightmap and shadows.">
+
+
+  <meta name="author" content="Saad Amin">
+  
+  <meta property="article:author" content="Saad Amin">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Saad's blog">
+<meta property="og:title" content="Minecraft Shaders Part 3">
+<meta property="og:url" content="http://localhost:4000/blogs/mc_shaders_part3">
+
+
+  <meta property="og:description" content="In this tutorial we will look at implementing the lightmap and shadows.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/mc_shaders_part3/no_shadow_acne.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2021-02-21T00:00:00-08:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blogs/mc_shaders_part3">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Saad's blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/projects/">Projects</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">Personal</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.24)), url('/assets/images/mc_shaders_part3/no_shadow_acne.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Minecraft Shaders Part 3
+
+        
+      </h1>
+      
+        <p class="page__lead">In this tutorial we will look at implementing the lightmap and shadows.
+
+</p>
+      
+      
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Minecraft Shaders Part 3">
+    <meta itemprop="description" content="In this tutorial we will look at implementing the lightmap and shadows.">
+    <meta itemprop="datePublished" content="2021-02-21T00:00:00-08:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-cog"></i> Table of Contents</h4></header>
+              <ul class="toc__menu"><li><a href="#the-lightmap">The lightmap</a></li><li><a href="#shadows">Shadows</a><ul><li><a href="#shadow-mapping">Shadow Mapping</a></li><li><a href="#the-shadow-pass">The Shadow Pass</a></li><li><a href="#calculating-the-shadowing">Calculating the shadowing</a><ul><li><a href="#reconstructing-the-position">Reconstructing the position</a></li><li><a href="#checking-for-shadowing">Checking for Shadowing</a></li></ul></li></ul></li><li><a href="#fixing-the-sky">Fixing the Sky</a></li><li><a href="#conclusion">Conclusion</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p>In this tutorial we will look at implementing the lightmap and shadows.</p>
+
+<h1 id="the-lightmap">The lightmap</h1>
+
+<p>In the gbuffers vertex shader, the lightmap is accesible by using <code class="language-plaintext highlighter-rouge">gl_MultiTexCoord1</code>. The <code class="language-plaintext highlighter-rouge">s</code> channel is the torch lightmap, and the <code class="language-plaintext highlighter-rouge">t</code> channel is the sky lightmap..However this value is not in the range [0, 1]. Instead it is in the range [0, 15], but that can change depending on the version of Minecraft you are playing on. Thankfully, if we multiply our lightmap by <code class="language-plaintext highlighter-rouge">gl_TextureMatrix[1]</code> to move it into the range [0, 1]. Well actually, not quite that range. It gets moved into the range [1.05 / 32, 32/33.05]. We can do some quick math to get it into the range [0, 1]. We have to also declare a new varying variable, <code class="language-plaintext highlighter-rouge">LightmapCoords</code>, to move the lightmap values from the vertex shader to the fragment shader. It looks something like this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">varying</span> <span class="kt">vec2</span> <span class="n">LightmapCoords</span><span class="p">;</span>
+
+<span class="p">[...]</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">[...]</span>
+    <span class="c1">// Use the texture matrix instead of dividing by 15 to maintain compatiblity for each version of Minecraft</span>
+    <span class="n">LightmapCoords</span> <span class="o">=</span> <span class="kt">mat2</span><span class="p">(</span><span class="nb">gl_TextureMatrix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">gl_MultiTexCoord1</span><span class="p">.</span><span class="n">st</span><span class="p">;</span>
+    <span class="c1">// Transform them into the [0, 1] range</span>
+    <span class="n">LightmapCoords</span> <span class="o">=</span> <span class="p">(</span><span class="n">LightmapCoords</span> <span class="o">*</span> <span class="mi">33</span><span class="p">.</span><span class="mo">05</span><span class="n">f</span> <span class="o">/</span> <span class="mi">32</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mo">05</span><span class="n">f</span> <span class="o">/</span> <span class="mi">32</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+    <span class="p">[...]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And in the fragment shader, we have to write the values to a color texture:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">varying</span> <span class="kt">vec2</span> <span class="n">LightmapCoords</span><span class="p">;</span>
+<span class="p">[...]</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">[...]</span>
+    <span class="cm">/* DRAWBUFFERS:012 */</span>
+    <span class="c1">// Write the values to the color textures</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">albedo</span><span class="p">;</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">Normal</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">LightmapCoords</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Then in compsite we read back the lightmap values like so:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec2</span> <span class="n">Lightmap</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">colortex2</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">).</span><span class="n">rg</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Remember, we are now using a new color texture, <code class="language-plaintext highlighter-rouge">colortex2</code>. We have to set it’s format and declare it. I use <code class="language-plaintext highlighter-rouge">RGB16</code> for the format since we don’t need the alpha channel. Also a small change from the last tutorial: I made a mistake and set the normal color texture format to <code class="language-plaintext highlighter-rouge">RGBA16</code>. This is wrong since we don’t use the alpha channel, so it should instead, like the lightmap color texture, be <code class="language-plaintext highlighter-rouge">RGB16</code>. The reason why I keep the blue channel in the lightmap instead of using <code class="language-plaintext highlighter-rouge">RG16</code> is because in the next upcoming tutorials, we will make use of that space to store material masks and whatnot.</p>
+
+<p>If we visualise the lightmap, we see something like this:</p>
+
+<p><img src="/assets/images/mc_shaders_part3/torch_lightmap.png" alt="Lightmap visualised" />
+<img src="/assets/images/mc_shaders_part3/sky_lightmap.png" alt="Lightmap visualised" /></p>
+
+<p>As you can see, in the first screenshot, while looking at glowstone, the lightmap looks more redder since there is a higher torch lighting value there. In the second screenshot, the part under the overhang thing looks darker since there is not torch light map and those blocks have less exposure to the sky. This may look good, but the rate at which the lightmap attenuates is not very realistic. We will have to modify the lightmap with out own functions. I will be using these:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="nf">AdjustLightmapTorch</span><span class="p">(</span><span class="k">in</span> <span class="kt">float</span> <span class="n">torch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="kt">float</span> <span class="n">K</span> <span class="o">=</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">float</span> <span class="n">P</span> <span class="o">=</span> <span class="mi">5</span><span class="p">.</span><span class="mo">06</span><span class="n">f</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">K</span> <span class="o">*</span> <span class="n">pow</span><span class="p">(</span><span class="n">torch</span><span class="p">,</span> <span class="n">P</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">float</span> <span class="nf">AdjustLightmapSky</span><span class="p">(</span><span class="k">in</span> <span class="kt">float</span> <span class="n">sky</span><span class="p">){</span>
+    <span class="kt">float</span> <span class="n">sky_2</span> <span class="o">=</span> <span class="n">sky</span> <span class="o">*</span> <span class="n">sky</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">sky_2</span> <span class="o">*</span> <span class="n">sky_2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">vec2</span> <span class="nf">AdjustLightmap</span><span class="p">(</span><span class="k">in</span> <span class="kt">vec2</span> <span class="n">Lightmap</span><span class="p">){</span>
+    <span class="kt">vec2</span> <span class="n">NewLightMap</span><span class="p">;</span>
+    <span class="n">NewLightMap</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">AdjustLightmapTorch</span><span class="p">(</span><span class="n">Lightmap</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">NewLightMap</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">AdjustLightmapSky</span><span class="p">(</span><span class="n">Lightmap</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">NewLightMap</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And this time we get much better results:</p>
+
+<p><img src="/assets/images/mc_shaders_part3/better_torch_lightmap.png" alt="Lightmap visualised with better attenuation" />
+<img src="/assets/images/mc_shaders_part3/better_sky_lightmap.png" alt="Lightmap visualised with better attenuation" /></p>
+
+<p>Now we have to get the color of the lighting from the lightmap value. I use this function to do so:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Input is not adjusted lightmap coordinates</span>
+<span class="kt">vec3</span> <span class="nf">GetLightmapColor</span><span class="p">(</span><span class="k">in</span> <span class="kt">vec2</span> <span class="n">Lightmap</span><span class="p">){</span>
+    <span class="c1">// First adjust the lightmap</span>
+    <span class="n">Lightmap</span> <span class="o">=</span> <span class="n">AdjustLightmap</span><span class="p">(</span><span class="n">Lightmap</span><span class="p">);</span>
+    <span class="c1">// Color of the torch and sky. The sky color changes depending on time of day but I will ignore that for simplicity</span>
+    <span class="k">const</span> <span class="kt">vec3</span> <span class="n">TorchColor</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">25</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">08</span><span class="n">f</span><span class="p">);</span>
+    <span class="k">const</span> <span class="kt">vec3</span> <span class="n">SkyColor</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mo">05</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">15</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="n">f</span><span class="p">);</span>
+    <span class="c1">// Multiply each part of the light map with it's color</span>
+    <span class="kt">vec3</span> <span class="n">TorchLighting</span> <span class="o">=</span> <span class="n">Lightmap</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">TorchColor</span><span class="p">;</span>
+    <span class="kt">vec3</span> <span class="n">SkyLighting</span> <span class="o">=</span> <span class="n">Lightmap</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">SkyColor</span><span class="p">;</span>
+    <span class="c1">// Add the lighting togther to get the total contribution of the lightmap the final color.</span>
+    <span class="kt">vec3</span> <span class="n">LightmapLighting</span> <span class="o">=</span> <span class="n">TorchLighting</span> <span class="o">+</span> <span class="n">SkyLighting</span><span class="p">;</span>
+    <span class="c1">// Return the value</span>
+    <span class="k">return</span> <span class="n">LightmapLighting</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then in <code class="language-plaintext highlighter-rouge">main</code> we get the lightmap color and use that in lighting calculations:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">vec2</span> <span class="n">Lightmap</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">colortex2</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">).</span><span class="n">rg</span><span class="p">;</span>
+    <span class="c1">// Get the lightmap color</span>
+    <span class="kt">vec3</span> <span class="n">LightmapColor</span> <span class="o">=</span> <span class="n">GetLightmapColor</span><span class="p">(</span><span class="n">Lightmap</span><span class="p">);</span>
+    <span class="c1">// Compute cos theta between the normal and sun directions</span>
+    <span class="kt">float</span> <span class="n">NdotL</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">Normal</span><span class="p">,</span> <span class="n">normalize</span><span class="p">(</span><span class="n">sunPosition</span><span class="p">)),</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+    <span class="c1">// Do the lighting calculations</span>
+    <span class="kt">vec3</span> <span class="n">Diffuse</span> <span class="o">=</span> <span class="n">Albedo</span> <span class="o">*</span> <span class="p">(</span><span class="n">LightmapColor</span> <span class="o">+</span> <span class="n">NdotL</span> <span class="o">+</span> <span class="n">Ambient</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>If we reload our shader with F3+R we get something that looks like this:</p>
+
+<p><img src="/assets/images/mc_shaders_part3/lightmap_demo_torch.png" alt="Lightmap demo" />
+<img src="/assets/images/mc_shaders_part3/lightmap_demo_sky.png" alt="Lightmap demo" /></p>
+
+<h1 id="shadows">Shadows</h1>
+
+<p>Something doesn’t look right in the second screenshot. The issue is that there are no shadows. In this section we will learn how shadows work and have a basic implemenation of them.</p>
+
+<h2 id="shadow-mapping">Shadow Mapping</h2>
+
+<p>Most games use a technique known as “shadow mapping” to calculate shadows in their games. This technique dates back all the way to 1978. In shadow mapping, we first render the scene from the light’s point of view into a depth map. This depth map is known as the shadow map. It looks something like this:</p>
+
+<p><img src="/assets/images/mc_shaders_part3/shadow_map.png" alt="The shadowmap" /></p>
+
+<p>The shadow map is in a coordinate system know as “shadow space”. Then, we render the scene from the player’s point of view. When doing the lighting calculations, we transform the fragment’s to shadow space. We can use the XY coordinates of the transformed position to sample the depth from the shadowmap, and the comapre it to the current fragemnt’s depth.</p>
+
+<p>You can set the resolution of the shadow map. For example, if I wanted to set shadow map resolution to 1024, I would do this in composite:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="kt">int</span> <span class="n">shadowMapResolution</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="the-shadow-pass">The Shadow Pass</h2>
+
+<p>Optifine provides an optional shader stage called <code class="language-plaintext highlighter-rouge">shadow</code>. It runs for everything (blocks, entities, etc). Since we are only going to be recording the depth values to the depth map, it looks like this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// shadow.vsh</span>
+<span class="cp">#version 120
+</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="nb">gl_Position</span> <span class="o">=</span> <span class="n">ftransform</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// shadow.fsh</span>
+<span class="cp">#version 120
+</span>
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{}</span>
+</code></pre></div></div>
+
+<h2 id="calculating-the-shadowing">Calculating the shadowing</h2>
+
+<p>In <code class="language-plaintext highlighter-rouge">composite</code>, we create a new function called <code class="language-plaintext highlighter-rouge">GetShadow</code>. It returns a floating point value that is 1 is the fragment is not in shadow, and 0 if it is.</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="nf">GetShadow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="p">[...]</span> <span class="c1">// We will implement this</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="reconstructing-the-position">Reconstructing the position</h3>
+
+<p>Since we haven’t written the fragment’s position to a color texture, we can’t just sample from one color texture and have the position that way. However, Optifine provides the depth texture taken from the eye’s point of view. It is called <code class="language-plaintext highlighter-rouge">depthtex0</code> (and if you are wondering, there is <code class="language-plaintext highlighter-rouge">depthtex1</code> and <code class="language-plaintext highlighter-rouge">depthtex2</code>, we will look at those in the next chapter). We also have the texture coordinates, so we can contruct a clip space coordinate using:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">ClipSpace</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">TexCoord</span><span class="p">,</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">depthtex0</span><span class="p">,</span> <span class="n">TexCoord</span><span class="p">).</span><span class="n">r</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>We have to move it to [-1, 1] from [0, 1] since <code class="language-plaintext highlighter-rouge">vec3(TexCoord, texture2D(depthtex0, TexCoord).r)</code> by itself is a screen space coordinate. Next, to get the view space coordinate, we have to muliply it by the inverse of the projection matrix. Optifine provides us a uniform for this called:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">mat4</span> <span class="n">gbufferProjectionInverse</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>We will also declare all the other matricies we will be needing:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">mat4</span> <span class="n">gbufferModelViewInverse</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">mat4</span> <span class="n">shadowModelView</span><span class="p">;</span>
+<span class="k">uniform</span> <span class="kt">mat4</span> <span class="n">shadowProjection</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>A quick note about matricies: The prefix <code class="language-plaintext highlighter-rouge">gbuffer*</code> is used for matricies used in the gbuffers programs, the prefix <code class="language-plaintext highlighter-rouge">shadow*</code> is used for the matricies in the shadow programs, the suffix <code class="language-plaintext highlighter-rouge">*Inverse</code> is used for inverse of any matrix, and the prefix <code class="language-plaintext highlighter-rouge">*Previous*</code> is used for the last frame’s matrix. And Optifine <code class="language-plaintext highlighter-rouge">*ModelView*</code> matricies are a lie, they only contain the view matrix rotation and feet offset. <code class="language-plaintext highlighter-rouge">gl_ModelViewMatrix</code> in <code class="language-plaintext highlighter-rouge">shadow</code> and <code class="language-plaintext highlighter-rouge">gbuffers_*</code> contains the actual view matrix multiplied by the actual model matrix.</p>
+
+<p>To convert from clip space to view scpace, we need to do this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">ViewW</span> <span class="o">=</span> <span class="n">gbufferProjectionInverse</span> <span class="o">*</span> <span class="nf">vec4</span><span class="p">(</span><span class="n">ClipSpace</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+<span class="kt">vec3</span> <span class="n">View</span> <span class="o">=</span> <span class="n">ViewW</span><span class="p">.</span><span class="n">xyz</span> <span class="o">/</span> <span class="n">ViewW</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>We divide by <code class="language-plaintext highlighter-rouge">w</code> to account for the inverse of the perspective divide. After that, we have to convert from view space to world space. We can do that by doing:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">World</span> <span class="o">=</span> <span class="n">gbufferModelViewInverse</span> <span class="o">*</span> <span class="nf">vec4</span><span class="p">(</span><span class="n">View</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>A note to the reader: this isn’t actually world space, it’s player space. It is centered around the player’s feet.</p>
+
+<p>After this we can convert directly to shadow space:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec4</span> <span class="n">ShadowSpace</span> <span class="o">=</span> <span class="n">shadowProjection</span> <span class="o">*</span> <span class="n">shadowModelView</span> <span class="o">*</span> <span class="n">World</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="checking-for-shadowing">Checking for Shadowing</h3>
+
+<p>However this is not shadow “screen” space. However, we can covert it to shadow screen space easily:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">SampleCoords</span> <span class="o">=</span> <span class="n">ShadowSpace</span><span class="p">.</span><span class="n">xyz</span> <span class="o">*</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span> <span class="o">+</span> <span class="mi">0</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Then we can sample from the shadow map and do the comparison. The shadow map in this case is <code class="language-plaintext highlighter-rouge">shadowtex0</code>. <code class="language-plaintext highlighter-rouge">shadowtex1</code> exists, but we will look into that later as well. Also remember to declare <code class="language-plaintext highlighter-rouge">shadowtex0</code>:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">uniform</span> <span class="kt">sampler2D</span> <span class="n">shadowtex0</span><span class="p">;</span>
+
+<span class="kt">float</span> <span class="nf">GetShadow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="p">[...]</span>
+    <span class="k">return</span> <span class="n">step</span><span class="p">(</span><span class="n">SampleCoords</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">shadowtex0</span><span class="p">,</span> <span class="n">SampleCoords</span><span class="p">.</span><span class="n">xy</span><span class="p">).</span><span class="n">r</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then in <code class="language-plaintext highlighter-rouge">main</code>, we can do this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">vec3</span> <span class="n">Diffuse</span> <span class="o">=</span> <span class="n">Albedo</span> <span class="o">*</span> <span class="p">(</span><span class="n">LightmapColor</span> <span class="o">+</span> <span class="n">NdotL</span> <span class="o">*</span> <span class="nf">GetShadow</span><span class="p">()</span> <span class="o">+</span> <span class="n">Ambient</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>If you reload the shader, you will probably get something that looks like this:</p>
+
+<p><img src="/assets/images/mc_shaders_part3/shadow_acne.png" alt="Shadow acne" /></p>
+
+<p>This weird thing is called shadow acne and is caused by a result of lack of shadow map information. We can fix this with a small bias in <code class="language-plaintext highlighter-rouge">GetShadow</code>:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="nf">GetShadow</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="p">[...]</span>
+    <span class="k">return</span> <span class="n">step</span><span class="p">(</span><span class="n">SampleCoords</span><span class="p">.</span><span class="n">z</span> <span class="o">-</span> <span class="mi">0</span><span class="p">.</span><span class="mo">001</span><span class="n">f</span><span class="p">,</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">shadowtex0</span><span class="p">,</span> <span class="n">SampleCoords</span><span class="p">.</span><span class="n">xy</span><span class="p">).</span><span class="n">r</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/mc_shaders_part3/no_shadow_acne.png" alt="Shadow bias" /></p>
+
+<p>You may also notice that the shadows look blobby. This is because the resolution of our shadow map is low. In the next tutorial, we will look at fixing this issue using a technique called shadow distortion.</p>
+
+<h1 id="fixing-the-sky">Fixing the Sky</h1>
+
+<p>With the depth texture we can fix the sky very easily. The sky’s depth is always 1.0, so right after we get the albedo, we can take advantage of early return to do this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Account for gamma correction</span>
+<span class="kt">vec3</span> <span class="n">Albedo</span> <span class="o">=</span> <span class="n">pow</span><span class="p">(</span><span class="n">texture2D</span><span class="p">(</span><span class="n">colortex0</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">).</span><span class="n">rgb</span><span class="p">,</span> <span class="kt">vec3</span><span class="p">(</span><span class="mi">2</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="p">));</span>
+<span class="kt">float</span> <span class="n">Depth</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">depthtex0</span><span class="p">,</span> <span class="n">TexCoords</span><span class="p">).</span><span class="n">r</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="n">Depth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">){</span>
+    <span class="nb">gl_FragData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">Albedo</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">);</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>You can also pass in the sampled depth value to <code class="language-plaintext highlighter-rouge">GetShadow</code> for a small speed up:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">float</span> <span class="nf">GetShadow</span><span class="p">(</span><span class="kt">float</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">vec3</span> <span class="n">ClipSpace</span> <span class="o">=</span> <span class="kt">vec3</span><span class="p">(</span><span class="n">TexCoords</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">;</span>
+    <span class="p">[...]</span>
+<span class="p">}</span>
+
+<span class="kt">vec3</span> <span class="n">Diffuse</span> <span class="o">=</span> <span class="n">Albedo</span> <span class="o">*</span> <span class="p">(</span><span class="n">LightmapColor</span> <span class="o">+</span> <span class="n">NdotL</span> <span class="o">*</span> <span class="nf">GetShadow</span><span class="p">(</span><span class="n">Depth</span><span class="p">)</span> <span class="o">+</span> <span class="n">Ambient</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/mc_shaders_part3/fixed_sky.png" alt="Fixed sky" /></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>We have done shadow mapping and lightmap lighting in Minecraft shaders. In the next tutorial we will see how we can improve our shadows.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2021-02-21T00:00:00-08:00">February 21, 2021</time></p>
+
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/blogs/mc_shaders_part2" class="pagination--pager" title="Minecraft Shaders Part 2
+">Previous</a>
+    
+    
+      <a href="/blogs/mc_shaders_part4" class="pagination--pager" title="Minecraft Shaders Part 4
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Saad's blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+  
+</html>

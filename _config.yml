@@ -10,7 +10,10 @@ plugins:
 
 author:
   name: "Saad Amin"
-  bio: "GPU Compute Programmer" 
+  bio: > 
+    Email: saadamin245@gmail.com"
+    Discord: saada#4211
+
 
 include:
   - _pages

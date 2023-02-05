@@ -1,7 +1,9 @@
 ---
 permalink: /about/
 title: "About Me"
-layout: splash
+layout: single
+author_profile: true
+
 ---
 
-I am a student at Mission San Jose High School who wants to major in computer science. My main areas of interest are algorithms and GPU compute.
+I am a high school student from the Bay Area who wants to major in computer science. I typically work with GPU compute and computer graphics.

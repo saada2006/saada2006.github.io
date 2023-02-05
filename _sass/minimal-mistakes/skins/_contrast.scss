@@ -13,6 +13,10 @@ $masthead-link-color: $text-color !default;
 $masthead-link-color-hover: $text-color !default;
 $navicon-link-color-hover: mix(#fff, $text-color, 80%) !default;
 
+$navbar-background: black !default;
+$navbar-text: white !default;
+$navbar-text-hover:#FAF9F6!default;
+
 /* contrast syntax highlighting (base16) */
 $base00: #000000 !default;
 $base01: #242422 !default;
