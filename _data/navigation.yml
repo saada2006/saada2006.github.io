@@ -1,4 +1,6 @@
 main:
+  - title: "Minecraft Shader Tutorials"
+    url: /minecraft-shader-tutorial/
   - title: "Projects"
     url: /projects/
   - title: "Personal"

@@ -20,6 +20,7 @@
 
 .archive__item {
   position: relative;
+  align-items: center;
 
   a {
     position: relative;
@@ -57,13 +58,13 @@
     top: 0;
     right: 0;
     bottom: 0;
+
   }
 
   a + a {
     opacity: 0.5;
   }
 }
-
 /* remove border*/
 .page__content {
   .archive__item-title {
@@ -76,23 +77,42 @@
   margin-top: 0;
   font-size: $type-size-6;
 
-  & + p {
-    text-indent: 0;
-  }
-
   a {
-    position: relative;
+    //position: absolute;
   }
 }
 
 .archive__item-teaser {
-  position: relative;
-  border-radius: $border-radius;
-  overflow: hidden;
+  //position: relative;
+  //border-radius: $border-radius;
+  //overflow: hidden;
 
   img {
     width: 100%;
   }
+
+  &--normal {
+    @extend .archive__item-teaser;
+    //white-space: nowrap;
+    //text-align: left;
+    img {
+      float: left;
+      width: 24%;
+      //position: left;
+      //text-align: left;
+      //vertical-align:middle;
+      left:0
+    }
+  }
+}
+
+.archive__item-info {
+  //float: right;
+  //align-content: left;
+  //align-self: left;
+  position: relative;
+  display: inline;
+  left: 8px;
 }
 
 .archive__item-caption {

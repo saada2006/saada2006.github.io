@@ -886,7 +886,8 @@ form button,
 input[type="submit"],
 .btn,
 .highlight,
-.archive__item-teaser {
+.archive__item-teaser,
+.archive__item-teaser--normal {
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out; }
 
@@ -1644,7 +1645,6 @@ th {
    ========================================================================== */
 .masthead {
   position: relative;
-  border-bottom: 1px solid #bfbfbf;
   -webkit-animation: intro 0.3s both;
   animation: intro 0.3s both;
   -webkit-animation-delay: 0.15s;
@@ -2217,7 +2217,7 @@ th {
 /* ==========================================================================
    SEARCH
    ========================================================================== */
-.layout--search .archive__item-teaser {
+.layout--search .archive__item-teaser, .layout--search .archive__item-teaser--normal {
   margin-bottom: 0.25em; }
 
 .search__toggle {
@@ -3446,7 +3446,8 @@ body {
       padding-right: 300px; } }
 
 .archive__item {
-  position: relative; }
+  position: relative;
+  align-items: center; }
   .archive__item a {
     position: relative;
     z-index: 10; }
@@ -3486,17 +3487,18 @@ body {
 .archive__item-excerpt {
   margin-top: 0;
   font-size: 0.75em; }
-  .archive__item-excerpt + p {
-    text-indent: 0; }
-  .archive__item-excerpt a {
-    position: relative; }
 
-.archive__item-teaser {
+.archive__item-teaser img, .archive__item-teaser--normal img {
+  width: 100%; }
+.archive__item-teaser--normal img {
+  float: left;
+  width: 24%;
+  left: 0; }
+
+.archive__item-info {
   position: relative;
-  border-radius: 4px;
-  overflow: hidden; }
-  .archive__item-teaser img {
-    width: 100%; }
+  display: inline;
+  left: 8px; }
 
 .archive__item-caption {
   position: absolute;
@@ -3587,10 +3589,10 @@ body {
         display: block;
         font-size: 0.75em; } }
   @media (min-width: 37.5em) {
-    .grid__item .archive__item-teaser {
+    .grid__item .archive__item-teaser, .grid__item .archive__item-teaser--normal {
       max-height: 200px; } }
   @media (min-width: 48em) {
-    .grid__item .archive__item-teaser {
+    .grid__item .archive__item-teaser, .grid__item .archive__item-teaser--normal {
       max-height: 120px; } }
 
 /*
@@ -3648,7 +3650,7 @@ body {
     font-size: 1.125em; }
     .feature__item--left .archive__item {
       float: left; }
-    .feature__item--left .archive__item-teaser {
+    .feature__item--left .archive__item-teaser, .feature__item--left .archive__item-teaser--normal {
       margin-bottom: 2em; }
     .feature__item--left a.btn::before {
       content: '';
@@ -3658,7 +3660,7 @@ body {
       right: 0;
       bottom: 0; }
     @media (min-width: 37.5em) {
-      .feature__item--left .archive__item-teaser {
+      .feature__item--left .archive__item-teaser, .feature__item--left .archive__item-teaser--normal {
         float: left;
         width: 40.6779661017%; }
       .feature__item--left .archive__item-body {
@@ -3676,7 +3678,7 @@ body {
     font-size: 1.125em; }
     .feature__item--right .archive__item {
       float: left; }
-    .feature__item--right .archive__item-teaser {
+    .feature__item--right .archive__item-teaser, .feature__item--right .archive__item-teaser--normal {
       margin-bottom: 2em; }
     .feature__item--right a.btn::before {
       content: '';
@@ -3688,7 +3690,7 @@ body {
     @media (min-width: 37.5em) {
       .feature__item--right {
         text-align: right; }
-        .feature__item--right .archive__item-teaser {
+        .feature__item--right .archive__item-teaser, .feature__item--right .archive__item-teaser--normal {
           float: right;
           width: 40.6779661017%; }
         .feature__item--right .archive__item-body {
@@ -3707,7 +3709,7 @@ body {
     .feature__item--center .archive__item {
       float: left;
       width: 100%; }
-    .feature__item--center .archive__item-teaser {
+    .feature__item--center .archive__item-teaser, .feature__item--center .archive__item-teaser--normal {
       margin-bottom: 2em; }
     .feature__item--center a.btn::before {
       content: '';
@@ -3719,7 +3721,7 @@ body {
     @media (min-width: 37.5em) {
       .feature__item--center {
         text-align: center; }
-        .feature__item--center .archive__item-teaser {
+        .feature__item--center .archive__item-teaser, .feature__item--center .archive__item-teaser--normal {
           margin: 0 auto;
           width: 40.6779661017%; }
         .feature__item--center .archive__item-body {

@@ -6,7 +6,7 @@ toc_label: "Table of Contents"
 toc_icon: "cog"
 categories:
     - shaders
-permalink: /blogs/mc_shaders_part4
+permalink: /minecraft-shaders-tutorial/part-4
 header:
   overlay_color: "#000"
   overlay_filter: "0.24"

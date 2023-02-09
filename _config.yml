@@ -26,6 +26,12 @@ permalink: none
 masthead_title: "Home"
 
 collections:
+  projects:
+    output: true
+    permalink: /:collection/:path/
+  minecraft-shaders:
+    output: true
+    permalink: /:collection/:path/
   posts:
     output: true
     permalink: /:collection/:path/

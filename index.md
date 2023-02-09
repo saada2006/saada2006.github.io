@@ -1,12 +1,17 @@
 ---
 permalink:
-layout: home
+layout: collection
+collection: posts
 #author_profile: true
+excerpt: | 
+  <br>
+  <br>
 header:
   overlay_color: "#000"
   overlay_filter: "0.24"
-  overlay_image: /assets/images/home/background.png
+  overlay_image: /assets/images/home/background6.png
 #collection: posts
-entries_layout: grid
 #classes: wide
 ---
+
+# Recent Posts

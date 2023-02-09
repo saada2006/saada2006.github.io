@@ -1,5 +1,9 @@
 ---
 permalink: /projects/
 title: "Projects"
-layout: splash
+layout: collection
+collection: projects
+classes: wide
 ---
+
+These are some of the projects I've made throughout the years.
