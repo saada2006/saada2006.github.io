@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>BVH Traversal Algorithms - Saad’s blog</title>
+<!-- begin _includes/seo.html --><title>GPU BVH Traversal Algorithms - Saad’s blog</title>
 <meta name="description" content="In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.">
 
 
@@ -22,7 +22,7 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Saad's blog">
-<meta property="og:title" content="BVH Traversal Algorithms">
+<meta property="og:title" content="GPU BVH Traversal Algorithms">
 <meta property="og:url" content="http://localhost:4000/blogs/gpu_traversal_algos">
 
 
@@ -124,7 +124,7 @@
           
         </a>
         <ul class="visible-links"><li class="masthead__menu-item">
-              <a href="/minecraft-shader-tutorial/">Minecraft Shader Tutorials</a>
+              <a href="/minecraft-shader-tutorials/">Minecraft Shader Tutorials</a>
             </li><li class="masthead__menu-item">
               <a href="/projects/">Projects</a>
             </li><li class="masthead__menu-item">
@@ -159,13 +159,12 @@
     <div class="wrapper">
       <h1 id="page-title" class="page__title" itemprop="headline">
         
-          BVH Traversal Algorithms
+          GPU BVH Traversal Algorithms
 
         
       </h1>
       
         <p class="page__lead">In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.
-
 </p>
       
       
@@ -189,7 +188,7 @@
 
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="BVH Traversal Algorithms">
+    <meta itemprop="headline" content="GPU BVH Traversal Algorithms">
     <meta itemprop="description" content="In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.">
     <meta itemprop="datePublished" content="2022-07-22T00:00:00-07:00">
     
@@ -207,9 +206,7 @@
             </nav>
           </aside>
         
-        <p>In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.</p>
-
-<h1 id="a-quick-primer-on-how-gpus-crunch-numbers-and-stuff">A Quick Primer on How GPUs Crunch Numbers and Stuff</h1>
+        <h1 id="a-quick-primer-on-how-gpus-crunch-numbers-and-stuff">A Quick Primer on How GPUs Crunch Numbers and Stuff</h1>
 
 <p>GPUs are essentially just like the CPU except with one small difference: every thing is massively parrallelized. Work is executed in the single instruction multiple thread (SIMT) model, meaning that a group of threads (usually 32) exeucte an instruction altoghter at once. This group of threads is known as a <em>warp</em> and on Nvidia GPUs, each warp executes on a single CUDA core, with the average GPU having thousands of them. The SIMT model allows your GPU to crunch a lot of numbers, for example, in a video game where millions of pixels need to undergo the same lighting calculations. However, an avid reader would realize the SIMT model would probably not work (well) at all with conditional statements like <code class="language-plaintext highlighter-rouge">if</code>. Suppose I have a block of code like:</p>
 

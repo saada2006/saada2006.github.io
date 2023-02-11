@@ -1,20 +1,19 @@
 ---
-title: "Minecraft Shaders Part 4"
+title: "Part 4 - Advanced Shadow Mapping"
 layout: single
 toc: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 categories:
     - shaders
-permalink: /minecraft-shaders-tutorial/part-4
+permalink: /minecraft-shader-tutorials/part-4
 header:
   overlay_color: "#000"
   overlay_filter: "0.24"
   overlay_image: /assets/images/mc_shaders_part4/transparent_shadows.png
   teaser: /assets/images/mc_shaders_part4/transparent_shadows.png
+excerpt: In this tutorial I will make our shadows look actually good. I will be covering things like PCF, shadow distortion, and transparent shadows.
 ---
-
-In this tutorial I will make our shadows look actually good. I will be covering things like PCF, shadow distortion, and transparent shadows.
 
 # Fixing the low detailed shadows problem
 

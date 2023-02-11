@@ -1,20 +1,19 @@
 ---
-title: "Minecraft Shaders Part 1"
+title: "Part 1 - The Final Program"
 layout: single
 toc: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 categories:
     - shaders
-permalink: /minecraft-shaders-tutorial/part-1
+permalink: /minecraft-shader-tutorials/part-1
 header:
   overlay_color: "#000"
   overlay_filter: "0.24"
   overlay_image: /assets/images/mc_shaders_part1/demo.png
   teaser: /assets/images/mc_shaders_part1/demo.png
+excerpt: In this tutorial we explore the most basic fullscreen pass, known as the final pass.
 ---
-
-In this tutorial we explore the most basic fullscreen pass: The final pass.
 
 # Basic file structure of a shader
 

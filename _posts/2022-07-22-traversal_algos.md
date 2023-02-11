@@ -1,5 +1,5 @@
 ---
-title: "BVH Traversal Algorithms"
+title: "GPU BVH Traversal Algorithms"
 layout: single
 toc: true
 toc_label: "Table of Contents"
@@ -12,9 +12,8 @@ header:
   overlay_filter: "0.24"
   overlay_image: /assets/images/bvh_traversal_algos/bvh.png
   teaser: /assets/images/bvh_traversal_algos/bvh.png
+excerpt: In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.
 ---
-
-In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.
 
 # A Quick Primer on How GPUs Crunch Numbers and Stuff
 

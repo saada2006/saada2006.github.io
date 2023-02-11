@@ -1,20 +1,19 @@
 ---
-title: "Minecraft Shaders Part 3"
+title: "Part 3 - Lighting and Shadows"
 layout: single
 toc: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 categories:
     - shaders
-permalink: /minecraft-shaders-tutorial/part-3
+permalink: /minecraft-shader-tutorials/part-3
 header:
   overlay_color: "#000"
   overlay_filter: "0.24"
   overlay_image: /assets/images/mc_shaders_part3/no_shadow_acne.png
   teaser: /assets/images/mc_shaders_part3/no_shadow_acne.png
+excerpt: In this tutorial we will look at implementing the lightmap and shadows.
 ---
-
-In this tutorial we will look at implementing the lightmap and shadows.
 
 # The lightmap
 

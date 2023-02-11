@@ -1,20 +1,19 @@
 ---
-title: "Minecraft Shaders Part 0"
+title: "Part 0 - Introduction"
 layout: single
 toc: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 categories:
     - shaders
-permalink: /minecraft-shaders-tutorial/part-0
+permalink: /minecraft-shader-tutorials/part-0
 header:
   overlay_color: "#000"
   overlay_filter: "0.24"
   overlay_image: /assets/images/mc_shaders_part0/2020-12-30_13.22.37.png
   teaser: /assets/images/mc_shaders_part0/2020-12-30_13.22.37.png
+excerpt: Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.
 ---
-
-Here I will explain a few basics of the graphics in Minecraft and the shader pipeline and how Minecraft shaders work in general.
 
 # OpenGL and GLSL
 

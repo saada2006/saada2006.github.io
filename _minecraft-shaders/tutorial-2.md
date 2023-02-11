@@ -1,20 +1,19 @@
 ---
-title: "Minecraft Shaders Part 2"
+title: "Part 2 - The Gbuffers Programs"
 layout: single
 toc: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 categories:
     - shaders
-permalink: /minecraft-shaders-tutorial/part-2
+permalink: /minecraft-shader-tutorials/part-2
 header:
   overlay_color: "#000"
   overlay_filter: "0.24"
   overlay_image: /assets/images/mc_shaders_part2/simple_diffuse.png
   teaser: /assets/images/mc_shaders_part2/simple_diffuse.png
+excerpt: Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting
 ---
-
-Today we will explore the gbuffers and composite shader programs, and we will use our new knowledge to implement basic diffuse lighting
 
 # What is gbuffers?
 
