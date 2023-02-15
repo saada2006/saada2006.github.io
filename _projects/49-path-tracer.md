@@ -13,7 +13,7 @@ I wrote this project in order to do path tracing in real time on the GPU. Curren
 It currently supports:
 - MIS, NEE, and physically-based BRDFs
 - Spatially-split BVHs
-- Terminated ath replacement
+- Terminated path replacement
 
 This project is the culmination of my work in computer graphics. I learned quite a lot from it, especially within the domain of GPU programming, and I have shared what I've learned in a few blogs:
 - [GPU BVH Traversal Algorithms](/blogs/gpu-bvh-traversal-algorithms)
