@@ -10,7 +10,7 @@
     <meta charset="utf-8">
 
 <!-- begin _includes/seo.html --><title>GPU Path Tracer - Saad’s blog</title>
-<meta name="description" content="A computer program that I am wrote to do real-time path tracing on the GPU. Currently, it supports MIS, NEE, and physically-based BRDFs. It also uses spatial splits BVHs. This was originally a project I had completed throughout April and a bit of May 2021, but I picked it back up in June 2022. My vision for this project was to create a small real-time path tracer entirely on OpenGL with cross-platform and cross-GPU support that can go beyond simple scenes.">
+<meta name="description" content="I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room.">
 
 
   <meta name="author" content="Saad Amin">
@@ -26,7 +26,7 @@
 <meta property="og:url" content="http://localhost:4000/projects/path-tracer">
 
 
-  <meta property="og:description" content="A computer program that I am wrote to do real-time path tracing on the GPU. Currently, it supports MIS, NEE, and physically-based BRDFs. It also uses spatial splits BVHs. This was originally a project I had completed throughout April and a bit of May 2021, but I picked it back up in June 2022. My vision for this project was to create a small real-time path tracer entirely on OpenGL with cross-platform and cross-GPU support that can go beyond simple scenes.">
+  <meta property="og:description" content="I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room.">
 
 
 
@@ -36,7 +36,7 @@
 
 
 
-  <meta property="article:published_time" content="2023-02-10T21:49:37-08:00">
+  <meta property="article:published_time" content="2023-02-14T22:09:13-08:00">
 
 
 
@@ -155,7 +155,7 @@
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
     <meta itemprop="headline" content="GPU Path Tracer">
-    <meta itemprop="description" content="A computer program that I am wrote to do real-time path tracing on the GPU. Currently, it supports MIS, NEE, and physically-based BRDFs. It also uses spatial splits BVHs. This was originally a project I had completed throughout April and a bit of May 2021, but I picked it back up in June 2022. My vision for this project was to create a small real-time path tracer entirely on OpenGL with cross-platform and cross-GPU support that can go beyond simple scenes.">
+    <meta itemprop="description" content="I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room.">
     
     
 
@@ -175,22 +175,47 @@
       <section class="page__content e-content" itemprop="text">
         
         <p><img src="/assets/images/path-tracer/cornell-box.png" alt="Cornell Box" />
-A computer program that I am wrote to do real-time path tracing on the GPU. Currently, it supports MIS, NEE, and physically-based BRDFs. It also uses spatial splits BVHs. This was originally a project I had completed throughout April and a bit of May 2021, but I picked it back up in June 2022. My vision for this project was to create a small real-time path tracer entirely on OpenGL with cross-platform and cross-GPU support that can go beyond simple scenes.</p>
+I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room.</p>
 
-<p>The code is available <a href="https://github.com/saada2006/GPUPathTracer">here</a>.</p>
+<p>It currently supports:</p>
+<ul>
+  <li>MIS, NEE, and physically-based BRDFs</li>
+  <li>Spatially-split BVHs</li>
+  <li>Terminated ath replacement</li>
+</ul>
+
+<p>This project is the culmination of my work in computer graphics. I learned quite a lot from it, especially within the domain of GPU programming, and I have shared what I’ve learned in a few blogs:</p>
+<ul>
+  <li><a href="/blogs/gpu-bvh-traversal-algorithms">GPU BVH Traversal Algorithms</a></li>
+</ul>
+
+<p>I worked on this project throughout April-May 2021 and Summer 2022. The code repository is <a href="https://github.com/saada2006/GPUPathTracer">here</a>.</p>
 
 <h2 id="gallery">Gallery</h2>
 
-<p><img src="/assets/images/path-tracer/sponza.png" alt="" /></p>
+<h3 id="breakfast-room">Breakfast Room</h3>
+<p><img src="/assets/images/path-tracer/breakfast2.png" alt="" /></p>
 
-<p><img src="/assets/images/path-tracer/dof.png" alt="" /></p>
+<h3 id="sponza">Sponza</h3>
+<p><img src="/assets/images/path-tracer/gray-sponza.png" alt="" />
+No curtains.</p>
 
-<p><img src="/assets/images/path-tracer/bunny.png" alt="" /></p>
+<p><img src="/assets/images/path-tracer/sponza.png" alt="" />
+With curtains.</p>
 
-<p><img src="/assets/images/path-tracer/blue.png" alt="" /></p>
-
+<h3 id="salle-de-bain">Salle De Bain</h3>
 <p><img src="/assets/images/path-tracer/bathroom.png" alt="" />
-For the last one, I made a small energy conservation mistake for the mirrors when I took the image. However, it is fixed now.</p>
+With darkened mirrors.</p>
+
+<h3 id="conference-room">Conference Room</h3>
+<p><img src="/assets/images/path-tracer/conference.png" alt="" /></p>
+
+<h3 id="miscellaneous">Miscellaneous</h3>
+
+<p><img src="/assets/images/path-tracer/cubemap-dof.png" alt="" /></p>
+
+<p><img src="/assets/images/path-tracer/cube.png" alt="" />
+These are some shots I took while debugging.</p>
 
 
         

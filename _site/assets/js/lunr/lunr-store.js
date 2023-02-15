@@ -32,11 +32,11 @@ var store = [{
         "title": "GPU BVH Traversal Algorithms",
         "excerpt":"A Quick Primer on How GPUs Crunch Numbers and Stuff GPUs are essentially just like the CPU except with one small difference: every thing is massively parrallelized. Work is executed in the single instruction multiple thread (SIMT) model, meaning that a group of threads (usually 32) exeucte an instruction altoghter...","categories": ["gpu"],
         "tags": [],
-        "url": "/blogs/gpu_traversal_algos",
+        "url": "/blogs/gpu-bvh-traversal-algorithms",
         "teaser": "/assets/images/bvh_traversal_algos/bvh.png"
       },{
         "title": "GPU Path Tracer",
-        "excerpt":"A computer program that I am wrote to do real-time path tracing on the GPU. Currently, it supports MIS, NEE, and physically-based BRDFs. It also uses spatial splits BVHs. This was originally a project I had completed throughout April and a bit of May 2021, but I picked it back...","categories": [],
+        "excerpt":"I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room. It currently supports: MIS, NEE, and physically-based BRDFs Spatially-split BVHs Terminated ath replacement This project is the culmination of my work...","categories": [],
         "tags": [],
         "url": "/projects/path-tracer",
         "teaser": "/assets/images/path-tracer/cornell-box.png"

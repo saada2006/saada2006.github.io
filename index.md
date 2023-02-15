@@ -12,6 +12,7 @@ header:
   overlay_image: /assets/images/home/background6.png
 #collection: posts
 #classes: wide
+title: "Welcome to my Website!"
 ---
 
 # Recent Posts

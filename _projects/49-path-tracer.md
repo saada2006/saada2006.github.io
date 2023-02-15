@@ -8,22 +8,44 @@ wide-class: true
 ---
 
 ![Cornell Box](/assets/images/path-tracer/cornell-box.png)
-A computer program that I am wrote to do real-time path tracing on the GPU. Currently, it supports MIS, NEE, and physically-based BRDFs. It also uses spatial splits BVHs. This was originally a project I had completed throughout April and a bit of May 2021, but I picked it back up in June 2022. My vision for this project was to create a small real-time path tracer entirely on OpenGL with cross-platform and cross-GPU support that can go beyond simple scenes. 
+I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room. 
 
-The code is available [here](https://github.com/saada2006/GPUPathTracer). 
+It currently supports:
+- MIS, NEE, and physically-based BRDFs
+- Spatially-split BVHs
+- Terminated ath replacement
+
+This project is the culmination of my work in computer graphics. I learned quite a lot from it, especially within the domain of GPU programming, and I have shared what I've learned in a few blogs:
+- [GPU BVH Traversal Algorithms](/blogs/gpu-bvh-traversal-algorithms)
+
+I worked on this project throughout April-May 2021 and Summer 2022. The code repository is [here](https://github.com/saada2006/GPUPathTracer). 
 
 ## Gallery 
 
+### Breakfast Room
+![](/assets/images/path-tracer/breakfast2.png)
+
+### Sponza
+![](/assets/images/path-tracer/gray-sponza.png)
+No curtains.
+
 ![](/assets/images/path-tracer/sponza.png)
+With curtains.
 
-![](/assets/images/path-tracer/dof.png)
-
-![](/assets/images/path-tracer/bunny.png)
-
-![](/assets/images/path-tracer/blue.png)
-
+### Salle De Bain
 ![](/assets/images/path-tracer/bathroom.png)
-For the last one, I made a small energy conservation mistake for the mirrors when I took the image. However, it is fixed now.
+With darkened mirrors.
+
+### Conference Room
+![](/assets/images/path-tracer/conference.png)
+
+### Miscellaneous
+
+![](/assets/images/path-tracer/cubemap-dof.png)
+
+![](/assets/images/path-tracer/cube.png)
+These are some shots I took while debugging.
+
 
 
 
