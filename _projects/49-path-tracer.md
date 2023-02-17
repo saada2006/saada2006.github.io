@@ -8,12 +8,12 @@ wide-class: true
 ---
 
 ![Cornell Box](/assets/images/path-tracer/cornell-box.png)
-I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room. 
+I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room on my GTX 980 using OpenGL. 
 
 It currently supports:
 - MIS, NEE, and physically-based BRDFs
 - Spatially-split BVHs
-- Terminated path replacement
+- Path regeneration
 
 This project is the culmination of my work in computer graphics. I learned quite a lot from it, especially within the domain of GPU programming, and I have shared what I've learned in a few blogs:
 - [GPU BVH Traversal Algorithms](/blogs/gpu-bvh-traversal-algorithms)
