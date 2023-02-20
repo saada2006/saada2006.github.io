@@ -33,8 +33,8 @@ No curtains.
 With curtains.
 
 ### Salle De Bain
-![](/assets/images/path-tracer/bathroom.png)
-With darkened mirrors.
+
+![](/assets/images/path-tracer/bathroom2.png)
 
 ### Conference Room
 ![](/assets/images/path-tracer/conference.png)
