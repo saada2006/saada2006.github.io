@@ -36,7 +36,7 @@ var store = [{
         "teaser": "/assets/images/bvh_traversal_algos/bvh.png"
       },{
         "title": "GPU Path Tracer",
-        "excerpt":"I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room. It currently supports: MIS, NEE, and physically-based BRDFs Spatially-split BVHs Terminated ath replacement This project is the culmination of my work...","categories": [],
+        "excerpt":"I wrote this project in order to do path tracing in real time on the GPU. Currently, the project attains 20-30 FPS in scenes like Conference and Breakfast Room on my GTX 980 using OpenGL. It currently supports: MIS, NEE, and physically-based BRDFs Spatially-split BVHs Path regeneration This project is...","categories": [],
         "tags": [],
         "url": "/projects/path-tracer",
         "teaser": "/assets/images/path-tracer/cornell-box.png"

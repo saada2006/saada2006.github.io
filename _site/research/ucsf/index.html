@@ -9,41 +9,35 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>CPU Renderer - Saad’s blog</title>
-<meta name="description" content="This was an offshoot of my GPU path tracing project. My goal was to implement more complex rendering algorithms here before adapting them to the GPU.">
+<!-- begin _includes/seo.html --><title>My Research at UCSF - Saad’s blog</title>
+<meta name="description" content="Home">
 
 
   <meta name="author" content="Saad Amin">
   
-  <meta property="article:author" content="Saad Amin">
-  
 
 
-<meta property="og:type" content="article">
+<meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Saad's blog">
-<meta property="og:title" content="CPU Renderer">
-<meta property="og:url" content="http://localhost:4000/projects/cpu-renderer">
+<meta property="og:title" content="My Research at UCSF">
+<meta property="og:url" content="http://localhost:4000/research/ucsf/">
 
 
-  <meta property="og:description" content="This was an offshoot of my GPU path tracing project. My goal was to implement more complex rendering algorithms here before adapting them to the GPU.">
-
-
-
-  <meta property="og:image" content="http://localhost:4000/assets/images/cpu-renderer/render.png">
-
-
-
-
-
-  <meta property="article:published_time" content="2023-04-06T18:24:01-07:00">
+  <meta property="og:description" content="Home">
 
 
 
 
 
 
-<link rel="canonical" href="http://localhost:4000/projects/cpu-renderer">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/research/ucsf/">
 
 
 
@@ -154,8 +148,8 @@
 
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="CPU Renderer">
-    <meta itemprop="description" content="This was an offshoot of my GPU path tracing project. My goal was to implement more complex rendering algorithms here before adapting them to the GPU.">
+    <meta itemprop="headline" content="My Research at UCSF">
+    
     
     
 
@@ -163,7 +157,7 @@
       
         <header>
           <h1 id="page-title" class="page__title p-name" itemprop="headline">
-            <a href="http://localhost:4000/projects/cpu-renderer" class="u-url" itemprop="url">CPU Renderer
+            <a href="http://localhost:4000/research/ucsf/" class="u-url" itemprop="url">My Research at UCSF
 </a>
           </h1>
           
@@ -174,12 +168,13 @@
 
       <section class="page__content e-content" itemprop="text">
         
-        <p><img src="/assets/images/cpu-renderer/render.png" alt="Cornell Spheres" />
-This was an offshoot of my GPU path tracing project. My goal was to implement more complex rendering algorithms here before adapting them to the GPU.</p>
+        <p>I have been working since August 2021 at the University of California, San Francisco on applying GPU acceleration to drug discovery algorithms. My work is on DOCK 3.8, a molecular docking program that finds poses in which a potential drug molecule and a protein bond, and then scores those poses.</p>
 
-<p>The code is <a href="https://github.com/saada2006/CpuRenderer">here</a>.</p>
+<p>Scoring is a computationally expensive task as it has a high arithmetic complexity and thousands of poses need to be scored. Making scoring efficient is crucial for speeding up molecular docking. As a result, I have been working on a project to score poses in parallel on the GPU. So far, I have obtained a 21% speedup over the original CPU version.</p>
 
-<p>Notice that the above image doesn’t seem to have caustics. I didn’t get that far because I stopped working on the project to come back to my GPU path tracer.</p>
+<p>Here’s a WIP report on my work:</p>
+<style> .pdf-embed-wrap-18316e32-efea-4f4b-bfd1-a40f88006216 { display:flex; flex-direction: column; width: 100%; height: 650px; } .pdf-embed-container-18316e32-efea-4f4b-bfd1-a40f88006216 { height: 100%; } .pdf-link-18316e32-efea-4f4b-bfd1-a40f88006216 { background-color: white; text-align: center; border-style: solid; } .pdf-embed-container-18316e32-efea-4f4b-bfd1-a40f88006216 iframe { width: 100%; height: 100%; } </style>
+<div class="pdf-embed-wrap-18316e32-efea-4f4b-bfd1-a40f88006216"> <div class="pdf-link-18316e32-efea-4f4b-bfd1-a40f88006216"> <a href="/assets/files/GPUDOCK.pdf" target="_blank">View PDF</a> </div> <div class="pdf-embed-container-18316e32-efea-4f4b-bfd1-a40f88006216"> <iframe src="/assets/files/GPUDOCK.pdf" frameborder="0" allowfullscreen=""></iframe> </div> </div>
 
         
       </section>
@@ -196,17 +191,6 @@ This was an offshoot of my GPU path tracing project. My goal was to implement mo
       
 
       
-  <nav class="pagination">
-    
-      <a href="/projects/path-tracer" class="pagination--pager" title="GPU Path Tracer
-">Previous</a>
-    
-    
-      <a href="/projects/minecraft-shaders" class="pagination--pager" title="Minecraft Shaders
-">Next</a>
-    
-  </nav>
-
     </div>
 
     

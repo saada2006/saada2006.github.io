@@ -6,9 +6,9 @@ author_profile: true
 
 ---
 
-I am a high school student from the Bay Area who wants to major in computer science. I typically work with real-time rendering, global illumination algorithms, and GPU compute.
+I am a high school student from the Bay Area who wants to major in computer science. I typically work with real-time rendering, global illumination algorithms, and GPU compute. More broadly, I'm interested in computer systems and AI. I am currently working at UCSF, where I am porting DOCK 3.8 to the GPU ([here](/research/ucsf/) is a quick rundown of it).
 
-## About my Area of Work
+## Computer Graphics
 
 What's all the math that goes into creating your favorite animated movies or rendering video games? Specifically, how do some movies and games acheive photorealistic graphics? I typically work on how the lighting works within these films and games through global illumination algorithms. Global illumination algorithms seek to approximate the solution to the rendering equation. My favorite global illumination algorithm (and the one I work with the most) is path tracing.
 
