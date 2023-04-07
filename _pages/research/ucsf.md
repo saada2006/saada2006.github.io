@@ -8,5 +8,4 @@ I have been working since August 2021 at the University of California, San Franc
 
 Scoring is a computationally expensive task as it has a high arithmetic complexity and thousands of poses need to be scored. Making scoring efficient is crucial for speeding up molecular docking. As a result, I have been working on a project to score poses in parallel on the GPU. So far, I have obtained a 21% speedup over the original CPU version.
 
-Here's a WIP report on my work:
-{% pdf "/assets/files/GPUDOCK.pdf" %}
+[Here's a WIP report on my work](/assets/files/GPUDOCK.pdf)
