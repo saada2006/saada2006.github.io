@@ -17,7 +17,7 @@ excerpt: In this blog post, I go over how we can design efficient GPU BVH traver
 
 # A Quick Primer on How GPUs Crunch Numbers and Stuff
 
-GPUs are essentially just like the CPU except with one small difference: every thing is massively parrallelized. Work is executed in the single instruction multiple thread (SIMT) model, meaning that a group of threads (usually 32) exeucte an instruction altoghter at once. This group of threads is known as a *warp* and on Nvidia GPUs, each warp executes on a single CUDA core, with the average GPU having thousands of them. The SIMT model allows your GPU to crunch a lot of numbers, for example, in a video game where millions of pixels need to undergo the same lighting calculations. However, an avid reader would realize the SIMT model would probably not work (well) at all with conditional statements like `if`. Suppose I have a block of code like:
+GPUs are massively parrallelized processors. Work is executed in the single instruction multiple thread (SIMT) model, meaning that a group of threads (usually 32) exeucte an instruction altoghter at once. This group of threads is known as a *warp* and on Nvidia GPUs, each warp executes on a single CUDA core, with the average GPU having thousands of them. The SIMT model allows your GPU to crunch a lot of numbers, for example, in a video game where millions of pixels need to undergo the same lighting calculations. However, an avid reader would realize the SIMT model would probably not work (well) at all with conditional statements like `if`. Suppose I have a block of code like:
 
 ```glsl
 if(cond)
