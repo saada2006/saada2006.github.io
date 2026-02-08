@@ -1,0 +1,37 @@
+title: Saad's blog
+description: >- # this means to ignore newlines until "baseurl:"
+  Home
+baseurl:
+
+minimal_mistakes_skin: "contrast"
+plugins:
+  - jekyll-feed
+  - jekyll-include-cache
+
+author:
+  name: "Saad Amin"
+  bio: > 
+    Email: saadamin245@gmail.com
+    Discord: saada#4211
+
+
+include:
+  - _pages
+
+permalink: /:categories/:title/
+paginate_path: /page:num/
+
+permalink: none
+
+masthead_title: "Home"
+
+collections:
+  projects:
+    output: true
+    permalink: /:collection/:path/
+  minecraft-shaders:
+    output: true
+    permalink: /:collection/:path/
+  posts:
+    output: true
+    permalink: /:collection/:path/

@@ -1,0 +1,376 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>GPU BVH Traversal Algorithms - Saad’s blog</title>
+<meta name="description" content="In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.">
+
+
+  <meta name="author" content="Saad Amin">
+  
+  <meta property="article:author" content="Saad Amin">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Saad's blog">
+<meta property="og:title" content="GPU BVH Traversal Algorithms">
+<meta property="og:url" content="http://localhost:4000/blogs/gpu-bvh-traversal-algorithms">
+
+
+  <meta property="og:description" content="In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/bvh_traversal_algos/bvh.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-07-22T00:00:00-07:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blogs/gpu-bvh-traversal-algorithms">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Saad's blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/minecraft-shader-tutorials/">Minecraft Shader Tutorials</a>
+            </li><li class="masthead__menu-item">
+              <a href="/projects/">Projects</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">Personal</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.24)), url('/assets/images/bvh_traversal_algos/bvh.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          GPU BVH Traversal Algorithms
+
+        
+      </h1>
+      
+        <p class="page__lead">In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.
+</p>
+      
+      
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="GPU BVH Traversal Algorithms">
+    <meta itemprop="description" content="In this blog post, I go over how we can design efficient GPU BVH traversal algorithms.">
+    <meta itemprop="datePublished" content="2022-07-22T00:00:00-07:00">
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-cog"></i> Table of Contents</h4></header>
+              <ul class="toc__menu"><li><a href="#a-quick-primer-on-how-gpus-crunch-numbers-and-stuff">A Quick Primer on How GPUs Crunch Numbers and Stuff</a></li><li><a href="#improving-hardware-utilization">Improving Hardware Utilization</a></li><li><a href="#persistent-gpu-computing">Persistent GPU Computing</a></li><li><a href="#persistent-regeneration">Persistent Regeneration</a></li><li><a href="#further-reading">Further Reading</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h1 id="a-quick-primer-on-how-gpus-crunch-numbers-and-stuff">A Quick Primer on How GPUs Crunch Numbers and Stuff</h1>
+
+<p>GPUs are essentially just like the CPU except with one small difference: every thing is massively parrallelized. Work is executed in the single instruction multiple thread (SIMT) model, meaning that a group of threads (usually 32) exeucte an instruction altoghter at once. This group of threads is known as a <em>warp</em> and on Nvidia GPUs, each warp executes on a single CUDA core, with the average GPU having thousands of them. The SIMT model allows your GPU to crunch a lot of numbers, for example, in a video game where millions of pixels need to undergo the same lighting calculations. However, an avid reader would realize the SIMT model would probably not work (well) at all with conditional statements like <code class="language-plaintext highlighter-rouge">if</code>. Suppose I have a block of code like:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span><span class="n">cond</span><span class="p">)</span>
+    <span class="n">MyFuncA</span><span class="p">();</span>
+<span class="k">else</span>
+    <span class="nf">MyFuncB</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>In the SIMT model, all threads where <code class="language-plaintext highlighter-rouge">cond</code> is true will proceed on to execute <code class="language-plaintext highlighter-rouge">MyFuncA()</code> while the other threads wait and do nothing. One the threads that were executing <code class="language-plaintext highlighter-rouge">MyFuncA()</code> are done, they then wait for the other threads to finish doing <code class="language-plaintext highlighter-rouge">MyFuncB()</code>. This leads to extremely poor hardware utilization, as each thread will, at some point, have to wait and do nothing. This problem gets even worse if <code class="language-plaintext highlighter-rouge">MyFuncA()</code> or <code class="language-plaintext highlighter-rouge">MyFuncB()</code> are costly to evaluate, which increases the wait times. This is exactly the problem in path tracing: too many conditionals lead to wasted hardware utilization. Some paths may terminate early on, and be completely idle until long running paths terminate.</p>
+
+<h1 id="improving-hardware-utilization">Improving Hardware Utilization</h1>
+
+<p>In 2009, a ground-breaking research paper by researchers Timo Aila and Samuli Laine at Nvidia published in the <em>High Performance Graphics</em> journal showed the results of experiments with various traversal algorithms, which included the performance of the <code class="language-plaintext highlighter-rouge">while-while</code> traversal algorithm:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function traverse(root)
+    node = root
+    while ray is not terminated
+        while node is not a leaf node
+            move to the next node
+        while node is a leaf node
+            intersect with the primitives in node
+            move to the next node
+</code></pre></div></div>
+
+<p>At first glance, this code seems to be properly parallelized by ensuring that <code class="language-plaintext highlighter-rouge">node</code> is either a parent or leaf node at the beginning of the two inner <code class="language-plaintext highlighter-rouge">while</code> loops. To test how well this algorithm is suited towards GPU ray tracing, a simulator was devised that “ran” the algorithm assuming perfect conditions in memory usage to set an upper bound for performance. The simulator also recorded the hardware utilization (referred to as “SIMD efficiency” in their paper) to gain further information. Surprisingly, the <code class="language-plaintext highlighter-rouge">while-while</code> traversal only acheived approximately 55% efficiency, meaning that it was poorly parallelized. Upon further inspection, this becomes obvious: the inner <code class="language-plaintext highlighter-rouge">while</code> loops have wildly varying execution times before they end. This means that, for example, while most rays had found a leaf node early on, some threads are stalling the entire warp by still going deeper into the tree. Then, when some nodes have exhausted the leaf nodes they have left to intersect, some threads are still going through each possible intersection. Then the loop was reorganized to follow an <code class="language-plaintext highlighter-rouge">if-if</code> structure:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function traverse(root)
+    node = root
+    while ray is not terminated
+        if node is not a leaf
+            proceed to the next node
+        if node is a leaf
+            intersect with the primitives in node
+            move to the next node
+</code></pre></div></div>
+
+<p>This function executres a lot better. This is because instead of having loops with can have varying execution times, we only have two <code class="language-plaintext highlighter-rouge">if-if</code> conditionals, which execute more or less in a constant amount of time . The traversal logic if the node is not a leaf may take a varying amount of time, and leaves can have a varying amount of primitives referenced with in them, so it is not perfectly constant. <code class="language-plaintext highlighter-rouge">if-if</code> was tested by the simulator and showed the perforamance skyrocketed to 75% efficiency.</p>
+
+<h1 id="persistent-gpu-computing">Persistent GPU Computing</h1>
+
+<p>In normal GPU compute applications, if you have <code class="language-plaintext highlighter-rouge">n</code> tasks to process, you tell the GPU to dispatch <code class="language-plaintext highlighter-rouge">n</code> threads and each thread will work on a single task. However, in many cases, the number tasks exceeds the number of available threads, so a hardware scheduler is needed to dispatch tasks at optimial timings. An optimization GPU hardware schedulers often use is to pause a warp’s execution of its tasks and move onto another set of tasks (this strategy is commonly used when the entire warp is idling because it is waiting on memory reads to return). This works very well for regular workloads, but for highly irregular workloads like ray-tracing, the hardware scheduler becomes our enenmy. To bypass it, the <em>persistent threads</em> programming model is used. Simply put, we launch just enough “tasks”” to completely fill our GPU, and implement our own software scheduler that gathers work for our threads. This has the benefit of not letting our hardware scheduler interrupt our program execution as it has no tasks to replace it with. Our software scheduler can be implemented by fetching our actual tasks from a work pool. One way we can implement persistent threads in ray tracing is to first represent our screen not as a 2D array but a long 1D array, and associate for each index in it a pixel coordinate on the 2D array. We can then increment atomic counters (until our 1D array is full) to get a pixel from this 1D array. An implementation of persistent threads in GLSL would look like this:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">layout</span><span class="p">(</span><span class="n">local_size_x</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span> <span class="n">local_size_y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">local_size_z</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span><span class="p">;</span> <span class="c1">// What this means is that we run one warp per each dispatch </span>
+    
+<span class="k">const</span> <span class="kt">uint</span> <span class="n">batchPortion</span> <span class="o">=</span> <span class="mi">32</span><span class="p">;</span> <span class="c1">// How many tasks our warp will process. This should be the number of threads in a warp</span>
+<span class="k">const</span> <span class="kt">uint</span> <span class="n">batchSize</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">batchPortion</span><span class="p">;</span> <span class="c1">// On a GTX 285, 3 is the optimal multiplier [1], but 1 seems to perform better on my GTX 980</span>
+
+<span class="n">shared</span> <span class="kt">uint</span> <span class="n">nextRay</span><span class="p">;</span>  <span class="c1">// In this warp, what will our next ray be?</span>
+<span class="n">shared</span> <span class="kt">uint</span> <span class="n">rayCount</span><span class="p">;</span> <span class="c1">// In this warp, how many rays are left? (if it is zero we need to get more tasks)</span>
+
+<span class="k">layout</span><span class="p">(</span><span class="n">std430</span><span class="p">)</span> <span class="n">buffer</span> <span class="n">globalNextRayBuf</span> <span class="p">{</span>
+    <span class="kt">uint</span> <span class="n">globalNextRay</span><span class="p">;</span> <span class="c1">// Initially zero</span>
+<span class="p">};</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">threadIdx</span> <span class="o">=</span>  <span class="n">gl_LocalInvocationID</span><span class="p">.</span><span class="n">xy</span><span class="p">;</span>
+
+    <span class="c1">// Initialize all to batchPortion since we will subtract batchPortion later to make it zero</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rayCount</span> <span class="o">=</span> <span class="n">batchPortion</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Update our remaining tasks</span>
+            <span class="n">nextRay</span> <span class="o">+=</span> <span class="n">batchPortion</span><span class="p">;</span>
+            <span class="n">rayCount</span> <span class="o">-=</span> <span class="n">batchPortion</span><span class="p">;</span>
+            <span class="c1">// If we are out of rays, then fetch some more</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">rayCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">nextRay</span> <span class="o">=</span> <span class="n">atomicAdd</span><span class="p">(</span><span class="n">globalNextRay</span><span class="p">,</span> <span class="n">batchSize</span><span class="p">);</span>
+                <span class="n">rayCount</span> <span class="o">=</span> <span class="n">batchSize</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">memoryBarrierShared</span><span class="p">();</span> <span class="c1">// Flush the value out of volatile memory</span>
+        <span class="p">}</span>
+        <span class="c1">// Find the ray we are processing for this specific thread</span>
+        <span class="kt">uint</span> <span class="n">rayIndex</span> <span class="o">=</span> <span class="n">nextRay</span> <span class="o">+</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">rayIndex</span> <span class="o">&gt;=</span> <span class="n">globalRayCount</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// Complete our ray task</span>
+        <span class="kt">ivec2</span> <span class="n">pixel</span> <span class="o">=</span> <span class="n">ConvertIndexToCoordiante</span><span class="p">(</span><span class="n">rayIndex</span><span class="p">);</span> 
+        <span class="kt">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="n">RayTrace</span><span class="p">(</span><span class="n">pixel</span><span class="p">);</span>
+        <span class="n">imageStore</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">pixel</span><span class="p">,</span> <span class="kt">vec4</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>The implemenation of persistent threads begins by grabbing 32 tasks per each warp (since the number of threads in a warp is 32) and then proceeds to go burn through the 32 threads before getting more. This allows us to bypass the hardware scheduler and have more performance. Much more. In fact, from my testing, I went from 13 FPS to outright 20 FPS in one scene. Simulation results show that this is close to 85% of maximum performance.</p>
+
+<h1 id="persistent-regeneration">Persistent Regeneration</h1>
+
+<p>In a path tracing loop, paths are often terminated because they either leave the scene or have too low energy. This is problematic for path tracers on the GPU because many threads stay idle because they were terminated early on while others continue long-running paths. To circumvent this issue, I choose to replace a path with a brand new one every time it was terminated by having too low energy. This gave me another 3-5 FPS boost.</p>
+
+<h1 id="further-reading">Further Reading</h1>
+
+<ol>
+  <li>Timo Aila and Samuli Laine. 2009. Understanding the Efficiency of Ray Traversal on GPUs. In <em>Proceedings of the Conference on High Performance Graphics 2009</em> (HPG ’09), Association for Computing Machinery, New Orleans, Louisiana, 145–149. DOI:https://doi.org/10.1145/1572769.1572792&lt;</li>
+  <li>Kshitij Gupta, Jeff A. Stuart, and John D. Owens. 2012. A study of Persistent Threads style GPU programming for GPGPU workloads. In <em>2012 Innovative Parallel Computing</em> (InPar), 1–14. DOI:https://doi.org/10.1109/InPar.2012.6339596</li>
+</ol>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2022-07-22T00:00:00-07:00">July 22, 2022</time></p>
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Saad's blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+  
+</html>

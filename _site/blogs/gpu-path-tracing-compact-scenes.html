@@ -1,0 +1,314 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.24.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Compactly Representing Scenes in GPU Path Tracing - Saad’s blog</title>
+<meta name="description" content="Memory bandwidth is usually not a bottleneck in GPU path tracing - unless it is.">
+
+
+  <meta name="author" content="Saad Amin">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Saad's blog">
+<meta property="og:title" content="Compactly Representing Scenes in GPU Path Tracing">
+<meta property="og:url" content="http://localhost:4000/blogs/gpu-path-tracing-compact-scenes">
+
+
+  <meta property="og:description" content="Memory bandwidth is usually not a bottleneck in GPU path tracing - unless it is.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/compact-scenes/breakfast-sq.png">
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/blogs/gpu-path-tracing-compact-scenes">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": null,
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Saad's blog Feed">
+
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [['$','$'], ['\\(','\\)']],
+          processEscapes: true
+        }
+      });
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">
+          Home
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/minecraft-shader-tutorials/">Minecraft Shader Tutorials</a>
+            </li><li class="masthead__menu-item">
+              <a href="/projects/">Projects</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/">Personal</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.24)), url('/assets/images/compact-scenes/breakfast-sq.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Compactly Representing Scenes in GPU Path Tracing
+
+        
+      </h1>
+      
+        <p class="page__lead">Memory bandwidth is usually not a bottleneck in GPU path tracing - unless it is.
+</p>
+      
+      
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Compactly Representing Scenes in GPU Path Tracing">
+    <meta itemprop="description" content="Memory bandwidth is usually not a bottleneck in GPU path tracing - unless it is.">
+    
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-cog"></i> Table of Contents</h4></header>
+              <ul class="toc__menu"><li><a href="#when-bandwith-becomes-an-issue">When Bandwith Becomes an Issue</a></li><li><a href="#storing-raw-data-more-compactly">Storing Raw Data More Compactly</a><ul><li><a href="#the-bvh">The BVH</a></li></ul></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h1 id="when-bandwith-becomes-an-issue">When Bandwith Becomes an Issue</h1>
+<p>Suppose you’ve super-duper optimized your path tracer to be 99.9% branchless - but wait! It still runs at 0.01 FPS!</p>
+
+<p>For us unforunately, bandwidth has finally caught up to us and is now a limiting factor. Optimizing bandwidth occurs in two ways:</p>
+<ol>
+  <li>we optimize our raw memory to store the same data but more compactly, or</li>
+  <li>we make sure our code doesn’t move around as much memory.</li>
+</ol>
+
+<h1 id="storing-raw-data-more-compactly">Storing Raw Data More Compactly</h1>
+<p>Usually, there’s a few components of a path tracer that are really frequently accessed:</p>
+<ol>
+  <li>the BVH,</li>
+  <li>the actual scene geometry,</li>
+  <li>whatever data structure we are using to store NEE surfaces,</li>
+  <li>any ray/work pools, and</li>
+  <li>textures.</li>
+</ol>
+
+<p>Usually 4 is a matter of our traversal algorithm and 5 is extremely fast on the GPU, so I’ll look at 1, 2, and 3.</p>
+
+<h2 id="the-bvh">The BVH</h2>
+
+<p>Let’s begin with a very rough way of how we would represent a node:</p>
+
+<div class="language-glsl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 24 bytes</span>
+<span class="k">struct</span> <span class="n">AABB</span> <span class="p">{</span>
+    <span class="kt">float</span> <span class="n">min</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+    <span class="kt">float</span> <span class="n">max</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="p">};</span>
+
+<span class="c1">// 41 bytes</span>
+<span class="k">struct</span> <span class="n">node</span> <span class="p">{</span>
+    <span class="n">AABB</span> <span class="n">box</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">isLeaf</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">child1</span><span class="p">,</span> <span class="n">child2</span><span class="p">;</span> <span class="c1">// parent data</span>
+    <span class="kt">int</span> <span class="n">startIndex</span><span class="p">,</span> <span class="n">endIndex</span><span class="p">;</span> <span class="c1">// leaf data</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Now this representation is absolutely horrible.</p>
+
+<p>On the GPU, a the L1 cache is 128 bytes. To make the most out of caching, we should place child nodes together and make sure that both nodes cannot cross a cache boundry. Additionally, the size of a node should divide 128 to ensure proper alignment.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Saad's blog. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+  
+</html>
